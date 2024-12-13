@@ -1,0 +1,102 @@
+{
+  "error": false,
+  "status": 200,
+  "data": [
+    {
+      "id": "31061",
+      "title": "Pop",
+      "picture": "https://api.deezer.com/radio/31061/image",
+      "picture_small": "https://cdn-images.dzcdn.net/images/misc/933805b7ebadc9c50845d7007e2c64d9/56x56-000000-80-0-0.jpg",
+      "picture_medium": "https://cdn-images.dzcdn.net/images/misc/933805b7ebadc9c50845d7007e2c64d9/250x250-000000-80-0-0.jpg",
+      "picture_big": "https://cdn-images.dzcdn.net/images/misc/933805b7ebadc9c50845d7007e2c64d9/500x500-000000-80-0-0.jpg",
+      "picture_xl": "https://cdn-images.dzcdn.net/images/misc/933805b7ebadc9c50845d7007e2c64d9/1000x1000-000000-80-0-0.jpg",
+      "tracklist": "https://api.deezer.com/radio/31061/tracks",
+      "md5_image": "933805b7ebadc9c50845d7007e2c64d9",
+      "type": "radio"
+    },
+    {
+      "id": "37151",
+      "title": "Hits",
+      "picture": "https://api.deezer.com/radio/37151/image",
+      "picture_small": "https://cdn-images.dzcdn.net/images/misc/235ec47f2b21c3c73e02fce66f56ccc5/56x56-000000-80-0-0.jpg",
+      "picture_medium": "https://cdn-images.dzcdn.net/images/misc/235ec47f2b21c3c73e02fce66f56ccc5/250x250-000000-80-0-0.jpg",
+      "picture_big": "https://cdn-images.dzcdn.net/images/misc/235ec47f2b21c3c73e02fce66f56ccc5/500x500-000000-80-0-0.jpg",
+      "picture_xl": "https://cdn-images.dzcdn.net/images/misc/235ec47f2b21c3c73e02fce66f56ccc5/1000x1000-000000-80-0-0.jpg",
+      "tracklist": "https://api.deezer.com/radio/37151/tracks",
+      "md5_image": "235ec47f2b21c3c73e02fce66f56ccc5",
+      "type": "radio"
+    },
+    {
+      "id": "38305",
+      "title": "The '80s",
+      "picture": "https://api.deezer.com/radio/38305/image",
+      "picture_small": "https://cdn-images.dzcdn.net/images/misc/8b9faa4bff0892283000a53b0d85eb73/56x56-000000-80-0-0.jpg",
+      "picture_medium": "https://cdn-images.dzcdn.net/images/misc/8b9faa4bff0892283000a53b0d85eb73/250x250-000000-80-0-0.jpg",
+      "picture_big": "https://cdn-images.dzcdn.net/images/misc/8b9faa4bff0892283000a53b0d85eb73/500x500-000000-80-0-0.jpg",
+      "picture_xl": "https://cdn-images.dzcdn.net/images/misc/8b9faa4bff0892283000a53b0d85eb73/1000x1000-000000-80-0-0.jpg",
+      "tracklist": "https://api.deezer.com/radio/38305/tracks",
+      "md5_image": "8b9faa4bff0892283000a53b0d85eb73",
+      "type": "radio"
+    },
+    {
+      "id": "30891",
+      "title": "Rock & Roll",
+      "picture": "https://api.deezer.com/radio/30891/image",
+      "picture_small": "https://cdn-images.dzcdn.net/images/misc/4e1363e9543b3d06b7ed44e27af0f8d3/56x56-000000-80-0-0.jpg",
+      "picture_medium": "https://cdn-images.dzcdn.net/images/misc/4e1363e9543b3d06b7ed44e27af0f8d3/250x250-000000-80-0-0.jpg",
+      "picture_big": "https://cdn-images.dzcdn.net/images/misc/4e1363e9543b3d06b7ed44e27af0f8d3/500x500-000000-80-0-0.jpg",
+      "picture_xl": "https://cdn-images.dzcdn.net/images/misc/4e1363e9543b3d06b7ed44e27af0f8d3/1000x1000-000000-80-0-0.jpg",
+      "tracklist": "https://api.deezer.com/radio/30891/tracks",
+      "md5_image": "4e1363e9543b3d06b7ed44e27af0f8d3",
+      "type": "radio"
+    },
+    {
+      "id": "37765",
+      "title": "Rock classics",
+      "picture": "https://api.deezer.com/radio/37765/image",
+      "picture_small": "https://cdn-images.dzcdn.net/images/misc/0a99395aa175e4dcec1d9fd4450ab3b8/56x56-000000-80-0-0.jpg",
+      "picture_medium": "https://cdn-images.dzcdn.net/images/misc/0a99395aa175e4dcec1d9fd4450ab3b8/250x250-000000-80-0-0.jpg",
+      "picture_big": "https://cdn-images.dzcdn.net/images/misc/0a99395aa175e4dcec1d9fd4450ab3b8/500x500-000000-80-0-0.jpg",
+      "picture_xl": "https://cdn-images.dzcdn.net/images/misc/0a99395aa175e4dcec1d9fd4450ab3b8/1000x1000-000000-80-0-0.jpg",
+      "tracklist": "https://api.deezer.com/radio/37765/tracks",
+      "md5_image": "0a99395aa175e4dcec1d9fd4450ab3b8",
+      "type": "radio"
+    },
+    {
+      "id": "37051",
+      "title": "Salsa",
+      "picture": "https://api.deezer.com/radio/37051/image",
+      "picture_small": "https://cdn-images.dzcdn.net/images/misc/67bedf50ce0a352e6631ad04abf6d97b/56x56-000000-80-0-0.jpg",
+      "picture_medium": "https://cdn-images.dzcdn.net/images/misc/67bedf50ce0a352e6631ad04abf6d97b/250x250-000000-80-0-0.jpg",
+      "picture_big": "https://cdn-images.dzcdn.net/images/misc/67bedf50ce0a352e6631ad04abf6d97b/500x500-000000-80-0-0.jpg",
+      "picture_xl": "https://cdn-images.dzcdn.net/images/misc/67bedf50ce0a352e6631ad04abf6d97b/1000x1000-000000-80-0-0.jpg",
+      "tracklist": "https://api.deezer.com/radio/37051/tracks",
+      "md5_image": "67bedf50ce0a352e6631ad04abf6d97b",
+      "type": "radio"
+    },
+    {
+      "id": "30941",
+      "title": "Reggaeton",
+      "picture": "https://api.deezer.com/radio/30941/image",
+      "picture_small": "https://cdn-images.dzcdn.net/images/misc/5cd1775bda54139254061beb0f43d1d7/56x56-000000-80-0-0.jpg",
+      "picture_medium": "https://cdn-images.dzcdn.net/images/misc/5cd1775bda54139254061beb0f43d1d7/250x250-000000-80-0-0.jpg",
+      "picture_big": "https://cdn-images.dzcdn.net/images/misc/5cd1775bda54139254061beb0f43d1d7/500x500-000000-80-0-0.jpg",
+      "picture_xl": "https://cdn-images.dzcdn.net/images/misc/5cd1775bda54139254061beb0f43d1d7/1000x1000-000000-80-0-0.jpg",
+      "tracklist": "https://api.deezer.com/radio/30941/tracks",
+      "md5_image": "5cd1775bda54139254061beb0f43d1d7",
+      "type": "radio"
+    },
+    {
+      "id": "36791",
+      "title": "Latin Music",
+      "picture": "https://api.deezer.com/radio/36791/image",
+      "picture_small": "https://cdn-images.dzcdn.net/images/misc/dec4342e03a6028e6bab7be636741b65/56x56-000000-80-0-0.jpg",
+      "picture_medium": "https://cdn-images.dzcdn.net/images/misc/dec4342e03a6028e6bab7be636741b65/250x250-000000-80-0-0.jpg",
+      "picture_big": "https://cdn-images.dzcdn.net/images/misc/dec4342e03a6028e6bab7be636741b65/500x500-000000-80-0-0.jpg",
+      "picture_xl": "https://cdn-images.dzcdn.net/images/misc/dec4342e03a6028e6bab7be636741b65/1000x1000-000000-80-0-0.jpg",
+      "tracklist": "https://api.deezer.com/radio/36791/tracks",
+      "md5_image": "dec4342e03a6028e6bab7be636741b65",
+      "type": "radio"
+    }
+  ]
+}
