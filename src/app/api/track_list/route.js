@@ -12,7 +12,7 @@ async function trackList({ id }) {
       data: data.data,
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return {
       status: 0,
       error: true,

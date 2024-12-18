@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getApiRadioList } from "../../app/helpers/functions";
 import Category from "../Category/Category";
 import { categoryType } from "@/types/deezerApiTypes";
@@ -7,16 +7,14 @@ import { categoryType } from "@/types/deezerApiTypes";
 export default function CategoryList() {
   const [categoryList, setCategoryList] = useState([]);
 
-  const handleUpdatePage = () => {
-    (async () => {
-      const { data } = await getApiRadioList(true);
-      console.log(data);
+  const handleUpdatePage = useCallback(async () => {
+    const { data } = await getApiRadioList(true);
+    setCategoryList(data);
+  }, []);
 
-      setCategoryList(data || []);
-    })();
-  };
-
-  useEffect(handleUpdatePage, []);
+  useEffect(() => {
+    handleUpdatePage();
+  }, []);
 
   return (
     <>

@@ -9,13 +9,12 @@ import {
 } from "react";
 
 const initialMatchState: matchStateType = {
-  currentRound: 0,
-  timeToGuess: 30,
-  numberOfGuesses: 5,
-  numberOfSongs: 2,
+  timeToGuess: 15,
+  guesses: 5,
+  songsPerGuess: 2,
   step: 1,
   category: "",
-  songList: [],
+  roundList: [],
   log: [],
 };
 
@@ -30,28 +29,50 @@ const matchReducer = (state: matchStateType, payload: payloadType) => {
     case "NEXT_STEP": {
       return { ...state, step: state.step + 1 };
     }
-    case "SET_SONGS": {
+    case "SET_ROUNDS": {
+      let songs = [...payload.songList];
+      if (!songs || songs.length === 0) {
+        return {
+          ...state,
+        };
+      }
+
+      let roundList: roundType[] = [];
+      for (let i = 0; i < state.guesses; i++) {
+        roundList.push({ songChoices: [], correctSong: 0 });
+      }
+
+      roundList.forEach((round) => {
+        //.sort(() => 0.5 - Math.random())
+        for (let i = 0; i < state.songsPerGuess; i++) {
+          round.songChoices.push(songs.pop());
+        }
+        round.correctSong = Math.floor(
+          Math.random() * round.songChoices.length
+        );
+      });
+
       return {
         ...state,
-        songList: payload.songList,
-        step: state.step + 1,
+        roundList,
       };
     }
     case "SET_LOG": {
-      return { ...state, log: [...state.log, payload.newLog] };
+      return {
+        ...state,
+        log: [...state.log, payload.newLog],
+      };
     }
-    case "NEXT_ROUND": {
-      return { ...state, currentRound: state.currentRound + 1 };
-    }
-    default: {
-      throw Error("Unknown action");
-    }
+    default:
+      throw new Error(`Unhandled action type: ${payload.type}`);
   }
 };
 
-const MatchContext = createContext<matchType>([initialMatchState, () => null]);
+const MatchContext = createContext<
+  [state: matchStateType, dispatch: Dispatch<payloadType>]
+>([initialMatchState, () => null]);
 
-export function MatchProvider({ children }: PropsWithChildren) {
+export function MatchProvider({ children }: PropsWithChildren<{}>) {
   const [state, dispatch] = useReducer<Dispatch<payloadType>>(
     matchReducer,
     initialMatchState
@@ -66,23 +87,24 @@ export function MatchProvider({ children }: PropsWithChildren) {
 
 export const useMatch = () => useContext(MatchContext);
 
-type matchStateType = {
-  currentRound: number;
-  timeToGuess: number;
-  numberOfGuesses: number;
-  numberOfSongs: number;
-  step: number;
-  category: string;
-  songList: songType[];
-  log: any[];
+export type roundType = {
+  songChoices: songType[];
+  correctSong: number;
 };
 
-type matchType = [matchStateType, Dispatch<payloadType>];
+export type matchStateType = {
+  timeToGuess: number;
+  guesses: number;
+  songsPerGuess: number;
+  step: number;
+  category: string;
+  roundList: roundType[];
+  log: any[];
+};
 
 type payloadType =
   | { type: "INITIAL"; state: matchStateType }
   | { type: "SET_CATEGORY"; category: categoryType }
   | { type: "NEXT_STEP" }
-  | { type: "SET_SONGS"; songList: songType[] }
-  | { type: "NEXT_ROUND" }
+  | { type: "SET_ROUNDS"; songList: songType[] }
   | { type: "SET_LOG"; newLog: any };

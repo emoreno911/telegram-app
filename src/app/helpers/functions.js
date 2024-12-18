@@ -1,26 +1,43 @@
+import radioListDataMockup from "../api/radio_list/radio_list_data_mockup.json";
+
+const mockup = true;
+
 export async function getApiRadio(payload = {}) {
-  try {
-    const res = await fetch(`/api/radio/`, {
-      method: "POST",
-      body: JSON.stringify(payload),
-    });
-    return await res.json();
-  } catch (error) {
-    console.error(error);
-    return { data: null };
+  if (mockup) {
+    const radioIndex = radioListDataMockup.data.findIndex(
+      ({ title }) => title === payload.title
+    );
+    if (radioIndex !== -1) {
+      return radioListDataMockup.data[radioIndex];
+    }
+  } else {
+    try {
+      const res = await fetch(`/api/radio/`, {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(error);
+      return { data: null };
+    }
   }
 }
 
 export async function getApiRadioList(payload = {}) {
-  try {
-    const res = await fetch(`/api/radio_list/`, {
-      method: "POST",
-      body: JSON.stringify(payload),
-    });
-    return await res.json();
-  } catch (error) {
-    console.error(error);
-    return { data: null };
+  if (mockup) {
+    return radioListDataMockup;
+  } else {
+    try {
+      const res = await fetch(`/api/radio_list/`, {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+      return await res.json();
+    } catch (error) {
+      console.error(error);
+      return { data: null };
+    }
   }
 }
 
@@ -59,7 +76,6 @@ export const getSongs = async (category, numberOfSongs) => {
         addRandomSongTilN(arr1, arr2, n);
       }
     };
-
     addRandomSongTilN(songList, data, numberOfSongs);
     return { data: songList };
   } catch (error) {

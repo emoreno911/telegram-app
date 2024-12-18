@@ -12,7 +12,7 @@ async function radio({ title }) {
       data: data.data[0],
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return {
       status: 0,
       error: true,

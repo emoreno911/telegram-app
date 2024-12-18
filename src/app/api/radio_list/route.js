@@ -1,26 +1,21 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
-import radioListDataMockup from "./radio_list_data_mockup.json";
 
-async function radio(mock = false) {
-  if (mock) {
-    return radioListDataMockup;
-  } else {
-    try {
-      const { data, status } = await axios.get(`https://api.deezer.com/radio`);
-      return {
-        error: false,
-        status,
-        data: data.data,
-      };
-    } catch (error) {
-      console.log(error);
-      return {
-        status: 0,
-        error: true,
-        data: null,
-      };
-    }
+async function radio() {
+  try {
+    const { data, status } = await axios.get(`https://api.deezer.com/radio`);
+    return {
+      error: false,
+      status,
+      data: data.data,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      status: 0,
+      error: true,
+      data: null,
+    };
   }
 }
 
