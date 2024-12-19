@@ -32,7 +32,7 @@ export default function Category(category: categoryType) {
 
   return (
     <div
-      className="bg-white rounded-lg shadow-md p-4 flex flex-col items-center justify-center transition-transform duration-200 ease-in-out transform hover:scale-105 cursor-pointer"
+      className="bg-slate-100 rounded-lg p-4 flex flex-col items-center justify-center transition-transform duration-200 ease-in-out transform hover:scale-105 cursor-pointer"
       onClick={() => {
         handleOnCategoryClick(category);
       }}

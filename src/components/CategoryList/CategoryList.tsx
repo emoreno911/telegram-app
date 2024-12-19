@@ -18,7 +18,7 @@ export default function CategoryList() {
 
   return (
     <>
-      <div className="bg-gray-100 min-h-screen p-4">
+      <div className="bg-sky-500 min-h-screen p-4">
         <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
           Music Categories
         </h1>

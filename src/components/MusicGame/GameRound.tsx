@@ -11,11 +11,12 @@ const GameRound: React.FC<Props> = ({ genre }) => {
   const [currentRound, setCurrentRound] = useState<number>(0);
 
   return (
-    <div className="bg-gray-100 text-gray-800 min-h-screen p-4">
-      <h1 className="text-2xl font-bold mb-6 text-center">{genre}</h1>
+    <div className="bg-sky-500 text-gray-800 min-h-screen p-4 w-full flex justify-center">
       {state.roundList?.length > 0 &&
         state.roundList.map((round) => (
           <Round
+            key={round.round}
+            genre={genre}
             {...round}
             currentRound={currentRound}
             setCurrentRound={setCurrentRound}
