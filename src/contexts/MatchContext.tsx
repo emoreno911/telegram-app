@@ -39,7 +39,7 @@ const matchReducer = (state: matchStateType, payload: payloadType) => {
 
       let roundList: roundType[] = [];
       for (let i = 0; i < state.guesses; i++) {
-        roundList.push({ songChoices: [], correctSong: 0 });
+        roundList.push({ songChoices: [], correctSong: 0, round: i });
       }
 
       roundList.forEach((round) => {
@@ -90,6 +90,7 @@ export const useMatch = () => useContext(MatchContext);
 export type roundType = {
   songChoices: songType[];
   correctSong: number;
+  round: number;
 };
 
 export type matchStateType = {
