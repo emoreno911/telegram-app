@@ -9,6 +9,7 @@ type propTypes = {
   currentRound: number;
   round: number;
   setCurrentRound: (newCurrent: number) => null;
+  finalRoundCallback: () => void;
 };
 
 export default function Round({
@@ -18,6 +19,7 @@ export default function Round({
   currentRound,
   round,
   setCurrentRound,
+  finalRoundCallback,
 }: propTypes) {
   const [state, dispatch] = useMatch();
 
@@ -155,7 +157,13 @@ export default function Round({
                       : "Better luck on the next time!"}
                   </p>
                   {state.roundList.length - 1 === round ? (
-                    <button className="bg-slate-100 flex items-center justify-center text-center text-lg font-bold uppercase rounded-lg py-4 px-6 mt-4">
+                    <button
+                      className="bg-slate-100 flex items-center justify-center text-center text-lg font-bold uppercase rounded-lg py-4 px-6 mt-4"
+                      onClick={() => {
+                        finalRoundCallback();
+                        //Navigation
+                      }}
+                    >
                       See Results
                     </button>
                   ) : (

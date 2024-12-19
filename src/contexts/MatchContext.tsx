@@ -21,7 +21,7 @@ const initialMatchState: matchStateType = {
 const matchReducer = (state: matchStateType, payload: payloadType) => {
   switch (payload.type) {
     case "INITIAL": {
-      return { ...payload.state };
+      return { ...initialMatchState };
     }
     case "SET_CATEGORY": {
       return { ...state, category: payload.category, step: 2 };
@@ -104,7 +104,7 @@ export type matchStateType = {
 };
 
 type payloadType =
-  | { type: "INITIAL"; state: matchStateType }
+  | { type: "INITIAL" }
   | { type: "SET_CATEGORY"; category: categoryType }
   | { type: "NEXT_STEP" }
   | { type: "SET_ROUNDS"; songList: songType[] }
