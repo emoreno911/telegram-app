@@ -1,5 +1,6 @@
 import { useMatch } from "@/contexts/MatchContext";
 import { songType } from "@/types/deezerApiTypes";
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type propTypes = {
@@ -9,7 +10,6 @@ type propTypes = {
   currentRound: number;
   round: number;
   setCurrentRound: (newCurrent: number) => null;
-  finalRoundCallback: () => void;
 };
 
 export default function Round({
@@ -19,7 +19,6 @@ export default function Round({
   currentRound,
   round,
   setCurrentRound,
-  finalRoundCallback,
 }: propTypes) {
   const [state, dispatch] = useMatch();
 
@@ -70,7 +69,7 @@ export default function Round({
     const time = Math.floor(Date.now() - start.current) / 1000;
     const newLog = {
       id: songChoices[correctSong].id,
-      correct: id === songChoices[correctSong].id,
+      correct: songChoices[correctSong].id === id,
       song: songChoices[correctSong].title,
       artist: songChoices[correctSong].artist.name,
       album: songChoices[correctSong].album.title,
@@ -157,15 +156,11 @@ export default function Round({
                       : "Better luck on the next time!"}
                   </p>
                   {state.roundList.length - 1 === round ? (
-                    <button
-                      className="bg-slate-100 flex items-center justify-center text-center text-lg font-bold uppercase rounded-lg py-4 px-6 mt-4"
-                      onClick={() => {
-                        finalRoundCallback();
-                        //Navigation
-                      }}
-                    >
-                      See Results
-                    </button>
+                    <Link href="/music-game/score">
+                      <button className="bg-slate-100 flex items-center justify-center text-center text-lg font-bold uppercase rounded-lg py-4 px-6 mt-4">
+                        See Results
+                      </button>
+                    </Link>
                   ) : (
                     <button
                       className="bg-slate-100 flex items-center justify-center text-center text-lg font-bold uppercase rounded-lg py-4 px-6 mt-4"
