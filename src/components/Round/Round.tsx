@@ -69,19 +69,22 @@ export default function Round({
   const handleOnClick = (id: string) => {
     audioFile.current.pause();
     const time = Math.floor(Date.now() - start.current) / 1000;
-    const newLog = {
-      id: songChoices[correctSong].id,
-      correct: songChoices[correctSong].id === id,
-      song: songChoices[correctSong].title,
-      artist: songChoices[correctSong].artist.name,
-      album: songChoices[correctSong].album.title,
-      time,
-      points: Math.floor(state.timeToGuess - time),
-    };
+
     setIsCorrect(id === songChoices[correctSong].id);
+
     dispatch({
-      type: "SET_LOG",
-      newLog,
+      type: "UPDATE_ROUND",
+      updatedRound: {
+        songChoices,
+        correctSong,
+        round,
+        guessed: songChoices[correctSong].id === id,
+        time,
+        points:
+          songChoices[correctSong].id === id
+            ? Math.floor(state.timeToGuess - time)
+            : 0,
+      },
     });
     setGuessed(true);
   };

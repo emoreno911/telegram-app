@@ -39,7 +39,14 @@ const matchReducer = (state: matchStateType, payload: payloadType) => {
 
       let roundList: roundType[] = [];
       for (let i = 0; i < state.guesses; i++) {
-        roundList.push({ songChoices: [], correctSong: 0, round: i });
+        roundList.push({
+          songChoices: [],
+          correctSong: 0,
+          round: i,
+          guessed: false,
+          time: 0,
+          points: 0,
+        });
       }
 
       roundList.forEach((round) => {
@@ -57,6 +64,26 @@ const matchReducer = (state: matchStateType, payload: payloadType) => {
         roundList,
       };
     }
+    case "UPDATE_ROUND": {
+      const newRoundList = [...state.roundList];
+      const index = newRoundList.findIndex(
+        (possibleRound) => possibleRound.round === payload.updatedRound.round
+      );
+
+      if (index !== -1) {
+        newRoundList[index] = {
+          ...newRoundList[index],
+          ...payload.updatedRound,
+        };
+        return {
+          ...state,
+          roundList: newRoundList,
+        };
+      } else {
+        return state;
+      }
+    }
+
     case "SET_LOG": {
       return {
         ...state,
@@ -91,6 +118,9 @@ export type roundType = {
   songChoices: songType[];
   correctSong: number;
   round: number;
+  guessed: boolean;
+  time: number;
+  points: number;
 };
 
 export type matchStateType = {
@@ -108,4 +138,5 @@ type payloadType =
   | { type: "SET_CATEGORY"; category: categoryType }
   | { type: "NEXT_STEP" }
   | { type: "SET_ROUNDS"; songList: songType[] }
+  | { type: "UPDATE_ROUND"; updatedRound: roundType }
   | { type: "SET_LOG"; newLog: any };
