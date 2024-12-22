@@ -163,7 +163,7 @@ export default function Round({
                           src={songChoices[correctSong].album.cover}
                           alt="Deezer Logo"
                         />
-                        <div className="flex flex-col justify-between items-center">
+                        <div className="flex flex-col justify-between items-start">
                           <span className="text-lg font-bold">
                             <p>{songChoices[correctSong].title_short} by</p>
                             <p>{songChoices[correctSong].artist.name}</p>
