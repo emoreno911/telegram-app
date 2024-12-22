@@ -2,6 +2,8 @@ import { useMatch } from "@/contexts/MatchContext";
 import { songType } from "@/types/deezerApiTypes";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import logo from "../../app/_assets/logos/deezer_logo.png";
+import Image from "next/image";
 
 type propTypes = {
   genre: string;
@@ -133,7 +135,7 @@ export default function Round({
                       onClick={() => handleOnClick(song.id)}
                     >
                       <span className="text-lg font-bold text-gray-700">
-                        {isArtist.current ? song.artist.name : song.title}
+                        {isArtist.current ? song.artist.name : song.title_short}
                       </span>
                     </li>
                   ))}
@@ -151,24 +153,53 @@ export default function Round({
               {guessed && (
                 <div className="flex flex-col items-center">
                   <p className="text-lg font-bold">
-                    {isCorrect
-                      ? "You got it!"
-                      : "Better luck on the next time!"}
+                    {isCorrect ? "You got it!" : "Better luck next time!"}
                   </p>
-                  {state.roundList.length - 1 === round ? (
-                    <Link href="/music-game/score">
-                      <button className="bg-slate-100 flex items-center justify-center text-center text-lg font-bold uppercase rounded-lg py-4 px-6 mt-4">
-                        See Results
+                  <>
+                    <div className="bg-slate-100 flex flex-col items-center justify-center text-center text-lg rounded-lg py-4 px-6 mt-4">
+                      <div className="flex">
+                        <img
+                          className="h-40 w-auto mr-6 rounded-lg"
+                          src={songChoices[correctSong].album.cover}
+                          alt="Deezer Logo"
+                        />
+                        <div className="flex flex-col justify-between items-center">
+                          <span className="text-lg font-bold">
+                            <p>{songChoices[correctSong].title_short} by</p>
+                            <p>{songChoices[correctSong].artist.name}</p>
+                          </span>
+                          <Link
+                            href={songChoices[correctSong].link}
+                            passHref={true}
+                            target="_blank"
+                          >
+                            <button className="bg-slate-300 flex flex-col text-lg rounded-lg py-4 px-6 mt-4">
+                              <p className="mr-2">Listen on</p>
+                              <Image
+                                className="h-6 w-auto"
+                                src={logo}
+                                alt="Deezer Logo"
+                              />
+                            </button>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                    {state.roundList.length - 1 === round ? (
+                      <Link href="/music-game/score">
+                        <button className="bg-slate-100 flex items-center justify-center text-center text-lg font-bold uppercase rounded-lg py-4 px-6 mt-4">
+                          See Results
+                        </button>
+                      </Link>
+                    ) : (
+                      <button
+                        className="bg-slate-100 flex items-center justify-center text-center text-lg font-bold uppercase rounded-lg py-4 px-6 mt-4"
+                        onClick={nextRound}
+                      >
+                        Next Round
                       </button>
-                    </Link>
-                  ) : (
-                    <button
-                      className="bg-slate-100 flex items-center justify-center text-center text-lg font-bold uppercase rounded-lg py-4 px-6 mt-4"
-                      onClick={nextRound}
-                    >
-                      Next Round
-                    </button>
-                  )}
+                    )}
+                  </>
                 </div>
               )}
             </div>
