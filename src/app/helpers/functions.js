@@ -62,11 +62,13 @@ export const getSongs = async (category, numberOfSongs) => {
     const addRandomSongTilN = (arr1, arr2, n) => {
       const possibleTrack = data[getRandomInt(arr2.length - 1)];
 
-      const trackAlreadyThere =
+      const isTrackEnabled = !!possibleTrack.preview;
+
+      const isTrackAlreadyThere =
         arr1.length > 0 &&
         arr1.findIndex((track) => track.id === possibleTrack.id) != -1;
 
-      if (!trackAlreadyThere) {
+      if (isTrackEnabled && !isTrackAlreadyThere) {
         arr1.push(possibleTrack);
       }
 
