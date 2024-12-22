@@ -15,7 +15,6 @@ const initialMatchState: matchStateType = {
   step: 1,
   category: "",
   roundList: [],
-  log: [],
 };
 
 const matchReducer = (state: matchStateType, payload: payloadType) => {
@@ -83,13 +82,6 @@ const matchReducer = (state: matchStateType, payload: payloadType) => {
         return state;
       }
     }
-
-    case "SET_LOG": {
-      return {
-        ...state,
-        log: [...state.log, payload.newLog],
-      };
-    }
     default:
       throw new Error(`Unhandled action type: ${payload.type}`);
   }
@@ -130,7 +122,6 @@ export type matchStateType = {
   step: number;
   category: string;
   roundList: roundType[];
-  log: any[];
 };
 
 type payloadType =
@@ -138,5 +129,4 @@ type payloadType =
   | { type: "SET_CATEGORY"; category: categoryType }
   | { type: "NEXT_STEP" }
   | { type: "SET_ROUNDS"; songList: songType[] }
-  | { type: "UPDATE_ROUND"; updatedRound: roundType }
-  | { type: "SET_LOG"; newLog: any };
+  | { type: "UPDATE_ROUND"; updatedRound: roundType };
