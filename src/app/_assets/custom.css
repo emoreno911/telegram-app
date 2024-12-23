@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css?family=Gochi+Hand');
+
+.font-gaming {
+  font-family: 'Gochi Hand', "Tahoma";
+}
+
+.bg-music-notes {
+  background: url(/bg-music-notes.jpg);
+  animation: parallax 10s linear infinite;
+}
+
+.text-shadow-black {
+	text-shadow: 2px 2px 3px #000000cc;
+}
+
+.text-shadow-white {
+	text-shadow: 2px 2px 3px #ffffffcc;
+}
+
+/** background parallax effect **/
+@keyframes parallax {
+  0% {background-position: 0}
+  30% {background-position: 100px 100px}
+  70% {background-position: -100px -100px}
+  100% {background-position: 0}
+}
+@-webkit-keyframes parallax {
+  0% {background-position: 0}
+  30% {background-position: 100px 100px}
+  70% {background-position: -100px -100px}
+  100% {background-position: 0}
+}
+
+/** Path animation **/
+.path-animation {
+	stroke-dasharray: 20000;
+	stroke-dashoffset: 20000;
+	animation: dash 10s linear forwards;
+}
+
+@keyframes dash {
+	to {
+    stroke-dashoffset: 0;
+	}
+}
+
+/* playfull button */
+.game-button {
+	font-family: 'Gochi Hand', cursive;
+	padding: 8px 32px;
+	font-size: 20px;
+	font-weight: bold;
+	text-transform: uppercase;
+	color: #ffffff;
+	background-color: #ff6bbf;
+	border: none;
+	border-radius: 50px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	box-shadow: 0 10px 0 #e84ac1,
+							0 15px 20px rgba(0, 0, 0, 0.25);
+	position: relative;
+	outline: none;
+}
+
+.game-button:hover {
+	transform: translateY(5px);
+	box-shadow: 0 5px 0 #e84ac1,
+							0 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+.game-button:active {
+	transform: translateY(10px);
+	box-shadow: 0 0 0 #e84ac1,
+							0 5px 10px rgba(0, 0, 0, 0.15);
+}
+
+.game-button::before {
+	content: '';
+	position: absolute;
+	top: 5px;
+	left: 10px;
+	right: 10px;
+	height: 50%;
+	background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.2));
+	border-radius: 25px 25px 100px 100px / 25px 25px 40px 40px;
+}
+
+.game-button::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: linear-gradient(90deg, #ff87df, #ff6bbf, #ff87df);
+	border-radius: 50px;
+	opacity: 0;
+	z-index: -1;
+	transition: opacity 0.3s ease;
+}
+
+.game-button:hover::after {
+	opacity: 1;
+}

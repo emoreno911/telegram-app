@@ -1,34 +1,62 @@
 'use client';
 
-import { Section, Cell, Image, List } from '@telegram-apps/telegram-ui';
 import { useTranslations } from 'next-intl';
 
 import { Link } from '@/components/Link/Link';
 import { Page } from '@/components/Page';
+import GameContainer from '@/components/Common/GameContainer';
+import GameButton from '@/components/Common/GameButton';
+import AnimatedLogo from '@/components/Common/AnimatedLogo';
+import { IconMusic, IconTrophy, IconUser, IconWallet } from '@tabler/icons-react';
 
 
 export default function Home() {
   const t = useTranslations('i18n');
 
+  const d = {
+    displayName: "Eduardo",
+    email: "eduardo@gmail.com",
+    photoURL: "https://avatar.iran.liara.run/public/boy",
+    uid: "768676868687",
+  };
+
+
   return (
     <Page back={false}>
-      <List>
-        <Section
-          header="Application Launch Data"
-          footer="These pages help developer to learn more about current launch information"
-        >
-          <Link href="/init-data">
-            <Cell subtitle="User data, chat information, technical data">
-              Init Data
-            </Cell>
-          </Link>
+      <GameContainer>
+          <h2 className="font-gaming font-semibold text-pink-600 text-5xl text-shadow-white z-10">Guess the Beat</h2>
+          <div className="rounded-full w-48 h-48 z-10">
+            <img src={d.photoURL} alt="app-pic" className="" />
+          </div>
+          {/* <div className="z-10">
+            <AnimatedLogo />
+          </div> */}
+
           <Link href="/music-game">
-            <Cell subtitle="Music dapp for fun with NFTs">
-              Guess the Beat 🎶
-            </Cell>
+            <GameButton>
+              {/* <IconMusic /> */}
+              <span>Play Now</span>
+            </GameButton>
           </Link>
-        </Section>
-      </List>
+          <Link  href="/leaderboard">
+            <GameButton>
+              {/* <IconTrophy /> */}
+              <span>Leaderboard</span>
+            </GameButton>
+          </Link>
+          <Link  href="/init-data">
+            <GameButton>
+              {/* <IconWallet /> */}
+              <span>Connect Wallet</span>
+            </GameButton>
+          </Link>
+          <Link  href="/user-profile">
+            <GameButton>
+              {/* <IconUser /> */}
+              <span>Profile</span>
+            </GameButton>
+          </Link>
+      </GameContainer>
     </Page>
   );
 }
