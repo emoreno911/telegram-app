@@ -99,6 +99,12 @@ export default function Round({
   useEffect(() => {
     setGuessState("NO_GUESS");
     isArtist.current = Math.floor(Math.random() * 2) === 1;
+    if (
+      isArtist.current &&
+      songChoices[0].artist.name === songChoices[1].artist.name
+    ) {
+      isArtist.current = false;
+    }
     // Should validate if all the choices have the same artist
     audioFile.current = new Audio(songChoices[correctSong].preview);
     audioFile.current.addEventListener("timeupdate", timeUpdateHandler);
