@@ -64,6 +64,10 @@ export const getSongs = async (category, numberOfSongs) => {
 
       const isTrackEnabled = !!possibleTrack.preview;
 
+      if (!isTrackEnabled) {
+        console.log({ possibleTrack });
+      }
+
       const isTrackAlreadyThere =
         arr1.length > 0 &&
         arr1.findIndex((track) => track.id === possibleTrack.id) != -1;

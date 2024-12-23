@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
-import { useMatch } from "@/contexts/MatchContext";
+import { roundType, useMatch } from "@/contexts/MatchContext";
 import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import { Page } from "@/components/Page";
 import Link from "next/link";
@@ -10,7 +10,7 @@ const GameRound = () => {
   const [, setStoredLog] = useLocalStorage("storedLog", []);
 
   const storeAndReset = () => {
-    const cleanLog = (roundList) => {
+    const cleanLog = (roundList: roundType[]) => {
       let newLog = roundList.map((oldRound) => {
         const { round, guessed, time, points, correctSong, songChoices } =
           oldRound;
@@ -53,23 +53,28 @@ const GameRound = () => {
         </h1>
         <div className="bg-slate-100 flex flex-col items-center justify-center text-center text-lg rounded-lg py-4 px-6 mt-4">
           {state.roundList.map((round, i) => (
-            <div className="bg-slate-300 rounded-lg py-4 px-6 mb-2">
-              <p>
+            <div
+              className={`${
+                round.guessed ? "bg-green-400" : "bg-red-400"
+              } rounded-lg py-4 px-6 mb-2`}
+            >
+              <p className="text-xl">
                 In round {i + 1} you got it {round.guessed ? "right!" : "wrong"}
               </p>
-              <div className="flex">
+              <div className="flex flex-col">
                 {round.songChoices.map((song, j) => (
-                  <p className="mr-2">
-                    {song.title_short} by {song.artist.name}
-                    {!(j === round.songChoices.length - 1) && " VS "}
-                  </p>
+                  <>
+                    <p className="font-bold">
+                      {song.title_short} by {song.artist.name}
+                    </p>
+                    <p>{!(j === round.songChoices.length - 1) && " VS "}</p>
+                  </>
                 ))}
               </div>
               {round.guessed && (
-                <p>
-                  {" "}
-                  you guessed in {round.time} seconds, giving you {round.points}{" "}
-                  points!
+                <p className="text-xl">
+                  You guessed in {Math.floor(round.time)} seconds, giving you{" "}
+                  {round.points} points!
                 </p>
               )}
             </div>
@@ -77,7 +82,7 @@ const GameRound = () => {
           <p>
             You got {timesCorrect}/{state.guesses} right!
           </p>
-          <p className="">Giving you {points} Points!</p>
+          <p className="">Giving you a total of {points} Points!</p>
         </div>
         <Link href="/music-game">
           <button

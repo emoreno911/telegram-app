@@ -69,7 +69,7 @@ const matchReducer = (state: matchStateType, payload: payloadType) => {
         (possibleRound) => possibleRound.round === payload.updatedRound.round
       );
 
-      if (index !== -1) {
+      if (index !== -1 && !newRoundList[index].guessed) {
         newRoundList[index] = {
           ...newRoundList[index],
           ...payload.updatedRound,

@@ -58,7 +58,7 @@ export type albumType = {
 };
 
 export type songType = {
-  id: string;
+  id: number;
   readable: true;
   title: string;
   title_short: string;

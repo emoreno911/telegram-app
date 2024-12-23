@@ -14,6 +14,8 @@ type propTypes = {
   setCurrentRound: (newCurrent: number) => null;
 };
 
+type guessStateTypes = "" | "NO_GUESS" | "CORRECT" | "INCORRECT";
+
 export default function Round({
   genre,
   songChoices,
@@ -26,8 +28,8 @@ export default function Round({
 
   const [progress, setProgress] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [guessed, setGuessed] = useState<boolean>(false);
-  const [isCorrect, setIsCorrect] = useState<boolean>(false);
+  const [guess, setguess] = useState<number>(0);
+  const [guessState, setGuessState] = useState<guessStateTypes>("");
 
   const audioFile = useRef<any>(null);
   const start = useRef<any>(null);
@@ -44,8 +46,8 @@ export default function Round({
       setIsLoading(false);
       audioFile.current.play();
       setTimeout(() => {
-        if (!guessed) {
-          handleOnClick("timeout");
+        if (guessState && guessState === "NO_GUESS") {
+          handleOnClick(0);
         } else if (audioFile.current) {
           audioFile.current.pause();
         }
@@ -66,11 +68,12 @@ export default function Round({
     }
   }, [audioFile.current]);
 
-  const handleOnClick = (id: string) => {
+  const handleOnClick = (id: number) => {
     audioFile.current.pause();
+    setguess(id);
     const time = Math.floor(Date.now() - start.current) / 1000;
 
-    setIsCorrect(id === songChoices[correctSong].id);
+    const guessed = id === songChoices[correctSong].id;
 
     dispatch({
       type: "UPDATE_ROUND",
@@ -78,15 +81,12 @@ export default function Round({
         songChoices,
         correctSong,
         round,
-        guessed: songChoices[correctSong].id === id,
+        guessed,
         time,
-        points:
-          songChoices[correctSong].id === id
-            ? Math.floor(state.timeToGuess - time)
-            : 0,
+        points: guessed ? Math.floor(state.timeToGuess - time * 0.5) : 0,
       },
     });
-    setGuessed(true);
+    setGuessState(guessed ? "CORRECT" : "INCORRECT");
   };
 
   const nextRound = () => {
@@ -94,6 +94,7 @@ export default function Round({
   };
 
   useEffect(() => {
+    setGuessState("NO_GUESS");
     isArtist.current = Math.floor(Math.random() * 2) === 1;
     // Should validate if all the choices have the same artist
     audioFile.current = new Audio(songChoices[correctSong].preview);
@@ -126,21 +127,22 @@ export default function Round({
               >
                 {songChoices.length > 0 &&
                   songChoices.map((song) => (
-                    <li
+                    <button
                       key={song.id}
                       className={`${
-                        guessed
-                          ? song.id === songChoices[correctSong].id
+                        guessState !== "NO_GUESS" && guess === song.id
+                          ? guessState === "CORRECT"
                             ? "bg-green-400"
                             : "bg-red-400"
                           : "bg-white"
                       } rounded-lg p-4 mx-2 flex flex-col items-center justify-center transition-transform duration-200 ease-in-out transform hover:scale-105 cursor-pointer min-w-40 max-w-96`}
                       onClick={() => handleOnClick(song.id)}
+                      disabled={guessState !== "NO_GUESS"}
                     >
                       <span className="text-lg font-bold text-gray-700">
                         {isArtist.current ? song.artist.name : song.title_short}
                       </span>
-                    </li>
+                    </button>
                   ))}
               </ul>
 
@@ -153,10 +155,12 @@ export default function Round({
                 </div>
               </div>
 
-              {guessed && (
+              {guessState !== "NO_GUESS" && (
                 <div className="flex flex-col items-center">
                   <p className="text-lg font-bold">
-                    {isCorrect ? "You got it!" : "Better luck next time!"}
+                    {guessState === "CORRECT"
+                      ? "You got it!"
+                      : "Better luck next time!"}
                   </p>
                   <>
                     <div className="bg-slate-100 flex flex-col items-center justify-center text-center text-lg rounded-lg py-4 px-6 mt-4">
