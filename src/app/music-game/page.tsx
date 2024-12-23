@@ -1,11 +1,13 @@
 import { Page } from "@/components/Page";
-import GameCategories from "@/components/MusicGame/GameCategories";
 import CategoryList from "@/components/CategoryList/CategoryList";
+import GameContainer from "@/components/Common/GameContainer";
 
 export default function MusicGamePage() {
   return (
     <Page>
-      <CategoryList />
+      <GameContainer>
+        <CategoryList />
+      </GameContainer>
     </Page>
   );
 }

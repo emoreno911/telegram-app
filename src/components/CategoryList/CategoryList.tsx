@@ -5,6 +5,7 @@ import { IconArrowBack, IconArrowBackUp } from "@tabler/icons-react";
 import { categoryType } from "@/types/deezerApiTypes";
 import Link from "next/link";
 import Category from "../Category/Category";
+import ScrollableContainer from "../Common/ScrollableContainer";
 
 export default function CategoryList() {
   const [categoryList, setCategoryList] = useState([]);
@@ -19,9 +20,8 @@ export default function CategoryList() {
   }, []);
 
   return (
-    <>
-      <div className="bg-sky-500 min-h-screen p-4">
-        <div className="flex align-center justify-center gap-2 text-gray-800">
+    <ScrollableContainer>
+        <div className="flex align-center justify-center gap-2">
           <Link href={`/`}>
             <button type="button">
               <IconArrowBackUp className="w-8 h-8" />
@@ -31,12 +31,11 @@ export default function CategoryList() {
             Music Categories
           </h2>
         </div>
-        <div className="grid grid-cols-2 gap-4 px-8">
+        <div className="grid grid-cols-2 gap-4">
           {categoryList.map((category: categoryType) => (
             <Category key={category.id} {...category} />
           ))}
         </div>
-      </div>
-    </>
+    </ScrollableContainer>
   );
 }

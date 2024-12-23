@@ -33,25 +33,25 @@ export default function Home() {
           </div> */}
 
           <Link href="/music-game">
-            <GameButton>
+            <GameButton className="!min-w-80">
               {/* <IconMusic /> */}
               <span>Play Now</span>
             </GameButton>
           </Link>
           <Link  href="/leaderboard">
-            <GameButton>
+            <GameButton className="!min-w-80">
               {/* <IconTrophy /> */}
               <span>Leaderboard</span>
             </GameButton>
           </Link>
           <Link  href="/init-data">
-            <GameButton>
+            <GameButton className="!min-w-80">
               {/* <IconWallet /> */}
               <span>Connect Wallet</span>
             </GameButton>
           </Link>
           <Link  href="/user-profile">
-            <GameButton>
+            <GameButton className="!min-w-80">
               {/* <IconUser /> */}
               <span>Profile</span>
             </GameButton>

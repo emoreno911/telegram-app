@@ -4,6 +4,8 @@ import { roundType, useMatch } from "@/contexts/MatchContext";
 import { useLocalStorage } from "@/app/hooks/useLocalStorage";
 import { Page } from "@/components/Page";
 import Link from "next/link";
+import GameContainer from "@/components/Common/GameContainer";
+import ScrollableContainer from "@/components/Common/ScrollableContainer";
 
 const GameRound = () => {
   const [state, dispatch] = useMatch();
@@ -47,22 +49,24 @@ const GameRound = () => {
 
   return (
     <Page>
-      <div className="bg-sky-500 text-gray-800 min-h-screen p-4 w-full  flex flex-col items-center justify-center">
-        <h1 className="text-white text-2xl font-bold mb-6 text-center">
-          Let's see how you did
+      <GameContainer>
+        <ScrollableContainer>
+        <div className="z-10">
+        <h1 className="text-white text-2xl font-bold text-center">
+          {"Let's see how you did it"}
         </h1>
-        <div className="bg-slate-100 flex flex-col items-center justify-center text-center text-lg rounded-lg py-4 px-6 mt-4">
+        <div className="bg-transparent flex flex-col items-center justify-center text-center text-lg rounded-lg py-4 px-2 md:px-6 mt-4">
           {state.roundList.map((round, i) => (
             <div
               key={i}
               className={`${
-                round.guessed ? "bg-green-400" : "bg-red-400"
-              } rounded-lg py-4 px-6 mb-2`}
+                round.guessed ? "bg-teal-600" : "bg-rose-600"
+              } rounded-lg py-4 px-6 mb-2 w-full`}
             >
-              <p className="text-xl">
-                In round {i + 1} you got it {round.guessed ? "right!" : "wrong"}
+              <p className="text-lg font-semibold">
+                Round #{i + 1}: you got it {round.guessed ? "right!" : "wrong"}
               </p>
-              <div className="flex flex-col">
+              {/* <div className="flex flex-col">
                 {round.songChoices.map((song, j) => (
                   <div key={j}>
                     <p className="font-bold">
@@ -71,29 +75,33 @@ const GameRound = () => {
                     <p>{!(j === round.songChoices.length - 1) && " VS "}</p>
                   </div>
                 ))}
-              </div>
+              </div> */}
               {round.guessed && (
-                <p className="text-xl">
+                <p className="text-sm">
                   You guessed in {Math.floor(round.time)} seconds, giving you{" "}
                   {round.points} points!
                 </p>
               )}
             </div>
           ))}
-          <p>
-            You got {timesCorrect}/{state.guesses} right!
-          </p>
-          <p className="">Giving you a total of {points} Points!</p>
+          <div className="bg-gray-100 px-6 py-4 rounded-md text-gray-800 w-full">
+            <p>
+              You got {timesCorrect}/{state.guesses} right!
+            </p>
+            <p className="">Giving you a total of {points} Points!</p>
+          </div>
         </div>
         <Link href="/music-game">
           <button
             onClick={storeAndReset}
-            className="bg-slate-100 flex items-center justify-center text-center text-lg font-bold uppercase rounded-lg py-4 px-6 mt-4"
+            className="mx-auto bg-slate-100 text-gray-800 flex items-center justify-center text-center text-lg font-bold uppercase rounded-lg py-4 px-6 mt-4"
           >
             Back to the start!
           </button>
         </Link>
-      </div>
+        </div>
+        </ScrollableContainer>
+      </GameContainer>
     </Page>
   );
 };

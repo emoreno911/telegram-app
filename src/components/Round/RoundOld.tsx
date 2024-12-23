@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import logo from "../../app/_assets/logos/deezer_logo.png";
 import Image from "next/image";
-import { IconDisc, IconMusic, IconVinyl } from "@tabler/icons-react";
 
 type propTypes = {
   genre: string;
@@ -127,82 +126,12 @@ export default function Round({
             <span>Loading...</span>
           ) : (
             <div>
-              <h1 className="text-3xl font-bold mb-6 text-center">{`${decodeURIComponent(genre)}`}</h1>
-              <div className="bg-gray-200 w-full h-36 md:h-48 rounded-md mb-6 p-2">
-              {guessState !== "NO_GUESS" ? (
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center justify-center bg-pink-300 p-1 rounded-md h-32 w-32 md:h-44 md:w-44">
-                    <img
-                      className="w-full h-full rounded-md"
-                      src={songChoices[correctSong].album.cover}
-                      alt="Music Cover"
-                    />
-                  </div>
-                  <div className="flex-grow text-gray-800 space-y-1 md:space-y-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-pink-500 font-semibold">Round #{round + 1}</span>
-                      <small className={`text-white font-semibold rounded-md px-2 ${guessState === "CORRECT" ? "bg-teal-600" : "bg-rose-600"}`}>
-                        {guessState === "CORRECT"
-                          ? "You got it!"
-                          : "Better luck next time!"}
-                      </small>
-                    </div>
-                    
-                    <h3 className="text-md md:text-lg font-bold mb-2">
-                      {songChoices[correctSong].title_short} by <span className="text-sky-700">{songChoices[correctSong].artist.name}</span>
-                    </h3>
-                    <div className="bg-white w-full h-1 rounded-lg">
-                      <div
-                        className="bg-pink-500 h-full rounded-lg"
-                        style={{ width: `${progress}%` }}
-                      />
-                    </div>
-
-                    <div>
-                      <Link
-                        href={songChoices[correctSong].link}
-                        passHref={true}
-                        target="_blank"
-                        className="!inline-block"
-                      >
-                        <div className="border border-slate-800 flex items-center gap-1 text-sm rounded-md mt-2 px-2">
-                          <span className="font-bold">Listen on</span>
-                          <Image
-                            className="h-4 w-16"
-                            src={logo}
-                            alt="Deezer Logo"
-                          />
-                        </div>
-                      </Link>
-                    </div>
-
-                  </div>
-                </div>
-              ): (
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center justify-center bg-pink-300 rounded-md h-32 w-32 md:h-44 md:w-44">
-                    {isArtist.current ? (
-                      <IconVinyl className="w-12 h-12 text-pink-500"/>
-                    ): (
-                      <IconMusic className="w-12 h-12 text-pink-500"/>
-                    )}
-                  </div>
-                  <div className="flex-grow text-gray-800">
-                    <span className="text-pink-500 font-semibold">Round #{round + 1}</span>
-                    <h3 className="text-xl font-bold mb-2">
-                      Guess the {isArtist.current ? "Artist" : "Song"}...
-                    </h3>
-                    <div className="bg-white w-full h-3 rounded-lg">
-                      <div
-                        className="bg-pink-500 h-full rounded-lg"
-                        style={{ width: `${progress}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-              </div>
-
+              <h1 className="text-2xl font-bold mb-6 text-center">{`${decodeURIComponent(genre)} #${
+                round + 1
+              }`}</h1>
+              <h1 className="text-xl font-bold mb-6 text-center">
+                Guess the {isArtist.current ? "Artist" : "Song"}
+              </h1>
               <ul
                 className={`font-[family-name:var(--font-geist-mono)] grid grid-cols-${state.songsPerGuess} text-2xl mx-2`}
               >
@@ -213,8 +142,8 @@ export default function Round({
                       className={`${
                         guessState !== "NO_GUESS" && guess === song.id
                           ? guessState === "CORRECT"
-                            ? "bg-teal-400"
-                            : "bg-rose-400"
+                            ? "bg-green-400"
+                            : "bg-red-400"
                           : "bg-white"
                       } rounded-lg p-4 mx-2 flex flex-col items-center justify-center transition-transform duration-200 ease-in-out transform hover:scale-105 cursor-pointer min-w-40 max-w-96`}
                       onClick={() => handleOnClick(song.id)}
@@ -227,9 +156,52 @@ export default function Round({
                   ))}
               </ul>
 
+              <div className="px-4 my-4">
+                <div className="bg-slate-100 w-full h-4 rounded-lg">
+                  <div
+                    className="bg-blue-500 h-full rounded-lg"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+              </div>
+
               {guessState !== "NO_GUESS" && (
                 <div className="flex flex-col items-center text-gray-800">
+                  <p className="text-lg font-bold text-gray-100">
+                    {guessState === "CORRECT"
+                      ? "You got it!"
+                      : "Better luck next time!"}
+                  </p>
                   <>
+                    <div className="bg-slate-100 flex flex-col items-center justify-center text-center text-lg rounded-lg py-4 px-6 mt-4">
+                      <div className="flex">
+                        <img
+                          className="h-40 w-auto mr-6 rounded-lg"
+                          src={songChoices[correctSong].album.cover}
+                          alt="Deezer Logo"
+                        />
+                        <div className="flex flex-col justify-between items-start">
+                          <span className="text-lg font-bold">
+                            <p>{songChoices[correctSong].title_short} by</p>
+                            <p>{songChoices[correctSong].artist.name}</p>
+                          </span>
+                          <Link
+                            href={songChoices[correctSong].link}
+                            passHref={true}
+                            target="_blank"
+                          >
+                            <button className="bg-slate-300 flex flex-col text-lg rounded-lg py-4 px-6 mt-4">
+                              <p className="mr-2">Listen on</p>
+                              <Image
+                                className="h-6 w-auto"
+                                src={logo}
+                                alt="Deezer Logo"
+                              />
+                            </button>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
                     {state.roundList.length - 1 === round ? (
                       <Link href="/music-game/score">
                         <button className="bg-slate-100 flex items-center justify-center text-center text-lg font-bold uppercase rounded-lg py-4 px-6 mt-4">
