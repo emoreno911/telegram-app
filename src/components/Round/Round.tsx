@@ -126,7 +126,7 @@ export default function Round({
             <span>Loading...</span>
           ) : (
             <div>
-              <h1 className="text-2xl font-bold mb-6 text-center">{`${genre} #${
+              <h1 className="text-2xl font-bold mb-6 text-center">{`${decodeURIComponent(genre)} #${
                 round + 1
               }`}</h1>
               <h1 className="text-xl font-bold mb-6 text-center">

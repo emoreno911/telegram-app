@@ -54,6 +54,7 @@ const GameRound = () => {
         <div className="bg-slate-100 flex flex-col items-center justify-center text-center text-lg rounded-lg py-4 px-6 mt-4">
           {state.roundList.map((round, i) => (
             <div
+              key={i}
               className={`${
                 round.guessed ? "bg-green-400" : "bg-red-400"
               } rounded-lg py-4 px-6 mb-2`}
@@ -63,12 +64,12 @@ const GameRound = () => {
               </p>
               <div className="flex flex-col">
                 {round.songChoices.map((song, j) => (
-                  <>
+                  <div key={j}>
                     <p className="font-bold">
                       {song.title_short} by {song.artist.name}
                     </p>
                     <p>{!(j === round.songChoices.length - 1) && " VS "}</p>
-                  </>
+                  </div>
                 ))}
               </div>
               {round.guessed && (

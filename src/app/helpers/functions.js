@@ -65,7 +65,7 @@ export const getSongs = async (category, numberOfSongs) => {
       const isTrackEnabled = !!possibleTrack.preview;
 
       if (!isTrackEnabled) {
-        console.log({ possibleTrack });
+        //console.log({ possibleTrack });
       }
 
       const isTrackAlreadyThere =
