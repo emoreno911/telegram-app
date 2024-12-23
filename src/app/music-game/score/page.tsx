@@ -85,7 +85,7 @@ const GameRound = () => {
             </div>
           ))}
           <div className="bg-gray-100 px-6 py-4 rounded-md text-gray-800 w-full">
-            <p>
+            <p className="font-semibold">
               You got {timesCorrect}/{state.guesses} right!
             </p>
             <p className="">Giving you a total of {points} Points!</p>

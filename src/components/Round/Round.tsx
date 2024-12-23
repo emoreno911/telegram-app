@@ -141,11 +141,7 @@ export default function Round({
                   <div className="flex-grow text-gray-800 space-y-1 md:space-y-3">
                     <div className="flex items-center gap-2">
                       <span className="text-pink-500 font-semibold">Round #{round + 1}</span>
-                      <small className={`text-white font-semibold rounded-md px-2 ${guessState === "CORRECT" ? "bg-teal-600" : "bg-rose-600"}`}>
-                        {guessState === "CORRECT"
-                          ? "You got it!"
-                          : "Better luck next time!"}
-                      </small>
+                      
                     </div>
                     
                     <h3 className="text-md md:text-lg font-bold mb-2">
@@ -203,8 +199,18 @@ export default function Round({
               )}
               </div>
 
-              <ul
-                className={`font-[family-name:var(--font-geist-mono)] grid grid-cols-${state.songsPerGuess} text-2xl mx-2`}
+              {guessState !== "NO_GUESS" && (
+                <div className="mb-4 text-center">
+                  <span className={`block text-white font-semibold rounded-md px-2 ${guessState === "CORRECT" ? "bg-teal-600" : "bg-rose-600"}`}>
+                    {guessState === "CORRECT"
+                      ? "You got it!"
+                      : "Better luck next time!"}
+                  </span>
+                </div>
+              )}
+
+              <div
+                className={`font-[family-name:var(--font-geist-mono)] grid grid-cols-1 md:grid-cols-2 gap-2 text-2xl w-fit mx-auto`}
               >
                 {songChoices.length > 0 &&
                   songChoices.map((song) => (
@@ -216,7 +222,7 @@ export default function Round({
                             ? "bg-teal-400"
                             : "bg-rose-400"
                           : "bg-white"
-                      } rounded-lg p-4 mx-2 flex flex-col items-center justify-center transition-transform duration-200 ease-in-out transform hover:scale-105 cursor-pointer min-w-40 max-w-96`}
+                      } min-w-80 md:min-w-32 rounded-lg p-4 mx-2 flex flex-col items-center justify-center transition-transform duration-200 ease-in-out transform hover:scale-105 cursor-pointer min-w-40 max-w-96`}
                       onClick={() => handleOnClick(song.id)}
                       disabled={guessState !== "NO_GUESS"}
                     >
@@ -225,7 +231,7 @@ export default function Round({
                       </span>
                     </button>
                   ))}
-              </ul>
+              </div>
 
               {guessState !== "NO_GUESS" && (
                 <div className="flex flex-col items-center text-gray-800">
