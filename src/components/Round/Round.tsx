@@ -16,6 +16,8 @@ type propTypes = {
 
 type guessStateTypes = "" | "NO_GUESS" | "CORRECT" | "INCORRECT";
 
+let clock: ReturnType<typeof setTimeout>;
+
 export default function Round({
   genre,
   songChoices,
@@ -41,11 +43,12 @@ export default function Round({
   };
 
   const canPlayThroughHandler = () => {
+    clearTimeout(clock);
     /* the audio is now playable; play it if permissions allow */
     if (currentRound === round) {
       setIsLoading(false);
       audioFile.current.play();
-      setTimeout(() => {
+      clock = setTimeout(() => {
         if (guessState && guessState === "NO_GUESS") {
           handleOnClick(0);
         } else if (audioFile.current) {
