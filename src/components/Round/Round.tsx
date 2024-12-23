@@ -101,6 +101,7 @@ export default function Round({
     isArtist.current = Math.floor(Math.random() * 2) === 1;
     if (
       isArtist.current &&
+      songChoices.length === 2 &&
       songChoices[0].artist.name === songChoices[1].artist.name
     ) {
       isArtist.current = false;
