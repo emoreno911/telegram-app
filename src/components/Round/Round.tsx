@@ -43,7 +43,6 @@ export default function Round({
   };
 
   const canPlayThroughHandler = () => {
-    clearTimeout(clock);
     /* the audio is now playable; play it if permissions allow */
     if (currentRound === round) {
       setIsLoading(false);
@@ -72,6 +71,7 @@ export default function Round({
   }, [audioFile.current]);
 
   const handleOnClick = (id: number) => {
+    clearTimeout(clock);
     audioFile.current.pause();
     setguess(id);
     const time = Math.floor(Date.now() - start.current) / 1000;
