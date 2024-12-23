@@ -53,7 +53,7 @@ export default function Round({
         } else if (audioFile.current) {
           audioFile.current.pause();
         }
-      }, state.timeToGuess * 1000);
+      }, (state.timeToGuess + 0.2) * 1000);
       start.current = Date.now();
     }
   };
@@ -74,7 +74,7 @@ export default function Round({
     clearTimeout(clock);
     audioFile.current.pause();
     setguess(id);
-    const time = Math.floor(Date.now() - start.current) / 1000;
+    const time = (Date.now() - start.current) / 1000;
 
     const guessed = id === songChoices[correctSong].id;
 
@@ -86,7 +86,7 @@ export default function Round({
         round,
         guessed,
         time,
-        points: guessed ? Math.floor(state.timeToGuess - time * 0.5) : 0,
+        points: guessed ? Math.round(state.timeToGuess - time * 0.75) : 0,
       },
     });
     setGuessState(guessed ? "CORRECT" : "INCORRECT");
