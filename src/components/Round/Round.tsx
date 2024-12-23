@@ -31,7 +31,7 @@ export default function Round({
   const [progress, setProgress] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [guess, setguess] = useState<number>(0);
-  const [guessState, setGuessState] = useState<guessStateTypes>("");
+  const [guessState, setGuessState] = useState<guessStateTypes>("NO_GUESS");
 
   const audioFile = useRef<any>(null);
   const start = useRef<any>(null);
