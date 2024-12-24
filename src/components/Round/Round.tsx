@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import logo from "../../app/_assets/logos/deezer_logo.png";
 import Image from "next/image";
-import { IconDisc, IconMusic, IconVinyl } from "@tabler/icons-react";
+import { IconMusic, IconVinyl } from "@tabler/icons-react";
 
 type propTypes = {
   genre: string;
@@ -111,10 +111,13 @@ export default function Round({
     audioFile.current = new Audio(songChoices[correctSong].preview);
     audioFile.current.addEventListener("timeupdate", timeUpdateHandler);
     audioFile.current.addEventListener("canplaythrough", canPlayThroughHandler);
+    //audioFile.current.crossOrigin = "anonymous";
+    
     return () => {
       resetAudio();
     };
   }, []);
+
   useEffect(() => {
     canPlayThroughHandler();
   }, [currentRound]);
@@ -127,7 +130,7 @@ export default function Round({
             <span>Loading...</span>
           ) : (
             <div>
-              <h1 className="text-3xl font-bold mb-6 text-center">{`${decodeURIComponent(genre)}`}</h1>
+              <h1 className="text-3xl font-bold mb-6 text-sky-500 text-shadow-black text-center">{`${decodeURIComponent(genre)}`}</h1>
               <div className="bg-gray-200 w-full h-36 md:h-48 rounded-md mb-6 p-2">
               {guessState !== "NO_GUESS" ? (
                 <div className="flex items-center gap-2">

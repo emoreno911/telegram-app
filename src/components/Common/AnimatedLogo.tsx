@@ -4,10 +4,10 @@ export default function AnimatedLogo() {
 			//     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
 			// </svg>
 			<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-				width="256.000000pt" height="256.000000pt" viewBox="0 0 256.000000 256.000000"
+				width="100.000000pt" height="100.000000pt" viewBox="0 0 100.000000 100.000000"
 				preserveAspectRatio="xMidYMid meet"
 			>
-				<g transform="translate(-10.000000,256.000000) scale(0.04,-0.04)"
+				<g transform="translate(-3.000000,100.000000) scale(0.015,-0.015)"
 				fill="#f0116a" stroke="#e84ac1" strokeWidth={50} className="path-animation">
 					<path d="M3933 5906 c-129 -42 -214 -173 -199 -306 22 -190 211 -307 388 -240
 					70 26 117 66 153 131 27 48 30 63 30 139 0 91 -10 120 -67 192 -60 76 -206

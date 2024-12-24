@@ -23,7 +23,7 @@ export default function Leaderboard({ currentUser, topUsers }: LeaderboardProps)
     <ScrollableContainer>
       <div className="flex flex-col items-center mb-8">
         <IconTrophy className="w-16 h-16 text-yellow-500 mb-2" />
-        <h1 className="text-3xl font-bold text-gray-200">Leaderboard</h1>
+        <h1 className="text-3xl font-bold font-gaming text-sky-500 text-shadow-black">Leaderboard</h1>
       </div>
 
       <div className="w-full grid grid-cols-2 gap-4 text-center rounded-lg bg-zinc-700 p-2 mb-6">

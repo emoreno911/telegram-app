@@ -52,10 +52,10 @@ const GameRound = () => {
       <GameContainer>
         <ScrollableContainer>
         <div className="z-10">
-        <h1 className="text-white text-2xl font-bold text-center">
+        <h2 className="text-white text-3xl font-bold text-sky-500 text-shadow-black text-center mt-2">
           {"Let's see how you did it"}
-        </h1>
-        <div className="bg-transparent flex flex-col items-center justify-center text-center text-lg rounded-lg py-4 px-2 md:px-6 mt-4">
+        </h2>
+        <div className="bg-transparent flex flex-col items-center justify-center text-center text-lg rounded-lg py-4 px-2 md:px-6">
           {state.roundList.map((round, i) => (
             <div
               key={i}

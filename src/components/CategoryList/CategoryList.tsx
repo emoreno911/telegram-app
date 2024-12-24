@@ -27,7 +27,7 @@ export default function CategoryList() {
               <IconArrowBackUp className="w-8 h-8" />
             </button>
           </Link>
-          <h2 className="text-2xl font-bold mb-6 text-center">
+          <h2 className="font-gaming text-3xl font-bold mb-6 text-center text-sky-500 text-shadow-black">
             Music Categories
           </h2>
         </div>

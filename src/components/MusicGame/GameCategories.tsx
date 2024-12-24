@@ -20,9 +20,9 @@ const categories = [
 export default function GameCategories() {
   return (
     <div className="bg-sky-500 min-h-screen p-4">
-      <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
+      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
         Music Categories
-      </h1>
+      </h2>
       <div className="grid grid-cols-2 gap-4 px-8">
         {categories.map((category) => (
           <div
