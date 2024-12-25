@@ -5,6 +5,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import logo from "../../app/_assets/logos/deezer_logo.png";
 import Image from "next/image";
 import { IconMusic, IconVinyl } from "@tabler/icons-react";
+import ProgressBar from "../Common/ProgressBar";
+import CanvasProgressBar from "../Common/CanvasProgressBar";
 
 type propTypes = {
   genre: string;
@@ -191,12 +193,13 @@ export default function Round({
                     <h3 className="text-xl font-bold mb-2">
                       Guess the {isArtist.current ? "Artist" : "Song"}...
                     </h3>
-                    <div className="bg-white w-full h-3 rounded-lg">
+                    {/* <div className="bg-white w-full h-3 rounded-lg">
                       <div
                         className="bg-pink-500 h-full rounded-lg"
                         style={{ width: `${progress}%` }}
                       />
-                    </div>
+                    </div> */}
+                    <CanvasProgressBar progress={progress} />
                   </div>
                 </div>
               )}
