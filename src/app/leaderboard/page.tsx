@@ -24,7 +24,7 @@ const topUsers = [
 
 export default function LeaderboardPage() {
   return (
-    <Page>
+    <Page back={true}>
 			<GameContainer>
 				<Leaderboard currentUser={currentUser} topUsers={topUsers} />
 			</GameContainer>

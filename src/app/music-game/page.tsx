@@ -4,7 +4,7 @@ import GameContainer from "@/components/Common/GameContainer";
 
 export default function MusicGamePage() {
   return (
-    <Page>
+    <Page back={true}>
       <GameContainer>
         <CategoryList />
       </GameContainer>

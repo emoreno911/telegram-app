@@ -4,7 +4,7 @@ import UserProfile from "@/components/Common/UserProfile";
 
 export default function UserProfilePage() {
   return (
-    <Page>
+    <Page back={true}>
 			<GameContainer>
 				<UserProfile />
 			</GameContainer>

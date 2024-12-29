@@ -11,7 +11,6 @@ import "@telegram-apps/telegram-ui/dist/styles.css";
 import "normalize.css/normalize.css";
 import "./_assets/globals.css";
 import "./_assets/custom.css";
-import Head from "next/head";
 
 export const metadata: Metadata = {
   title: "Guess The Beat",
@@ -35,8 +34,8 @@ export default async function RootLayout({ children }: PropsWithChildren) {
     <html lang={locale}>
       <link
         rel="icon"
-        href="/favico.ico"
-        type="image/x-icon"
+        href="/favico.svg"
+        type="image/svg"
         sizes="any"
       />
       <body>
