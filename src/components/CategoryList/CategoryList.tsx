@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
 import { getApiRadioList } from "@/helpers/functions";
-import { IconArrowBack, IconArrowBackUp } from "@tabler/icons-react";
+import { IconArrowBack, IconArrowBackUp, IconArrowLeft, IconHome } from "@tabler/icons-react";
 import { categoryType } from "@/types/deezerApiTypes";
 import Link from "next/link";
 import Category from "../Category/Category";
@@ -21,12 +21,19 @@ export default function CategoryList() {
 
   return (
     <ScrollableContainer>
+      <div className="absolute top-6 left-3 z-10">
+        <Link href={`/`}>
+          <button type="button">
+            <IconHome className="w-8 h-8" />
+          </button>
+        </Link>
+      </div>
         <div className="flex align-center justify-center gap-2">
-          <Link href={`/`}>
+          {/* <Link href={`/`}>
             <button type="button">
-              <IconArrowBackUp className="w-8 h-8" />
+              <IconArrowLeft className="w-8 h-8" />
             </button>
-          </Link>
+          </Link> */}
           <h2 className="font-gaming text-3xl font-bold mb-6 text-center text-sky-500 text-shadow-black">
             Music Categories
           </h2>

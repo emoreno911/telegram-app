@@ -1,6 +1,7 @@
-import { IconClock, IconStar, IconTrophy } from "@tabler/icons-react"
+import { IconClock, IconHome, IconStar, IconTrophy } from "@tabler/icons-react"
 import ScrollableContainer from "./ScrollableContainer"
 import MatchHistory from "./MatchHistory"
+import Link from "next/link"
 
 interface ProfileCardProps {
   avatarUrl: string
@@ -65,16 +66,24 @@ const matchHistory = [
 export default function UserProfile() {
     return (
 			<ScrollableContainer>
-					<GameProfileCard 
-						avatarUrl="https://avatar.iran.liara.run/public/girl"
-						username="PandoraRomanov"
-						topScore={15}
-						totalPoints={120}
-						averageTime={4.5}
-					/>
+        <div className="absolute top-6 left-3 z-10">
+          <Link href={`/`}>
+            <button type="button">
+              <IconHome className="w-8 h-8" />
+            </button>
+          </Link>
+        </div>
 
-					{/* Latest scores */}
-					<MatchHistory matches={matchHistory} />
+        <GameProfileCard 
+          avatarUrl="https://avatar.iran.liara.run/public/girl"
+          username="PandoraRomanov"
+          topScore={15}
+          totalPoints={120}
+          averageTime={4.5}
+        />
+
+        {/* Latest scores */}
+        <MatchHistory matches={matchHistory} />
 			</ScrollableContainer>
     )
 }

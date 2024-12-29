@@ -5,6 +5,7 @@ import { getLocale } from "next-intl/server";
 import { Root } from "@/components/Root/Root";
 import { I18nProvider } from "@/core/i18n/provider";
 import { MatchProvider } from "@/contexts/MatchContext";
+import DappProvider from "@/contexts/DappContext";
 
 import "@telegram-apps/telegram-ui/dist/styles.css";
 import "normalize.css/normalize.css";
@@ -14,6 +15,7 @@ import "./_assets/custom.css";
 export const metadata: Metadata = {
   title: "Guess The Beat",
   description: "The Telegram game for music lovers",
+  icons: "https://gateway.pinata.cloud/ipfs/bafkreiahcoxixyhzjk7fivigz2sov4rvrygb5wkpvzkg3juy3zixp3d6vm"
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {
@@ -24,7 +26,9 @@ export default async function RootLayout({ children }: PropsWithChildren) {
       <body>
         <I18nProvider>
           <Root>
-            <MatchProvider>{children}</MatchProvider>
+            <DappProvider>
+              <MatchProvider>{children}</MatchProvider>
+            </DappProvider>
           </Root>
         </I18nProvider>
       </body>

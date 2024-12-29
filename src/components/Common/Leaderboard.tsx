@@ -1,6 +1,7 @@
 import React from 'react'
-import { IconMedal, IconTrophy } from '@tabler/icons-react'
+import { IconHome, IconMedal, IconTrophy } from '@tabler/icons-react'
 import ScrollableContainer from './ScrollableContainer'
+import Link from 'next/link'
 
 interface User {
   id: number
@@ -21,8 +22,16 @@ export default function Leaderboard({ currentUser, topUsers }: LeaderboardProps)
 
   return (
     <ScrollableContainer>
+      <div className="absolute top-6 left-3 z-10">
+        <Link href={`/`}>
+          <button type="button">
+            <IconHome className="w-8 h-8" />
+          </button>
+        </Link>
+      </div>
+
       <div className="flex flex-col items-center mb-8">
-        <IconTrophy className="w-16 h-16 text-yellow-500 mb-2" />
+        {/* <IconTrophy className="w-16 h-16 text-yellow-500 mb-2" /> */}
         <h1 className="text-3xl font-bold font-gaming text-sky-500 text-shadow-black">Leaderboard</h1>
       </div>
 
