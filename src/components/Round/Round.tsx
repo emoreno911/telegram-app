@@ -5,7 +5,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import logo from "../../app/_assets/logos/deezer_logo.png";
 import Image from "next/image";
 import { IconMusic, IconVinyl } from "@tabler/icons-react";
-import ProgressBar from "../Common/ProgressBar";
 import CanvasProgressBar from "../Common/CanvasProgressBar";
 
 type propTypes = {
@@ -19,7 +18,7 @@ type propTypes = {
 
 type guessStateTypes = "" | "NO_GUESS" | "CORRECT" | "INCORRECT";
 
-let clock: ReturnType<typeof setTimeout>;
+let setTimeoutIdList: ReturnType<typeof setTimeout>[] = [];
 
 export default function Round({
   genre,
@@ -34,11 +33,21 @@ export default function Round({
   const [progress, setProgress] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [guess, setguess] = useState<number>(0);
-  const [guessState, setGuessState] = useState<guessStateTypes>("NO_GUESS");
+  const [guessState, setGuessState] = useState<guessStateTypes>("");
 
   const audioFile = useRef<any>(null);
   const start = useRef<any>(null);
   const isArtist = useRef<boolean>(false);
+
+  useEffect(() => {
+    console.log("changed to: ", { guessState });
+  }, [guessState]);
+
+  const clearTimeoutList = () => {
+    setTimeoutIdList.forEach((setTimeoutId) => {
+      clearTimeout(setTimeoutId);
+    });
+  };
 
   const timeUpdateHandler = () => {
     let newProgress = audioFile?.current?.currentTime / state.timeToGuess;
@@ -48,15 +57,20 @@ export default function Round({
   const canPlayThroughHandler = () => {
     /* the audio is now playable; play it if permissions allow */
     if (currentRound === round) {
-      setIsLoading(false);
+      if (isLoading) {
+        setIsLoading(false);
+      }
       audioFile.current.play();
-      clock = setTimeout(() => {
+      const newSetTimeoutId = setTimeout(() => {
+        console.log("timeout", { guessState });
         if (guessState && guessState === "NO_GUESS") {
           handleOnClick(0);
         } else if (audioFile.current) {
           audioFile.current.pause();
         }
       }, (state.timeToGuess + 0.2) * 1000);
+
+      setTimeoutIdList.push(newSetTimeoutId);
       start.current = Date.now();
     }
   };
@@ -74,7 +88,7 @@ export default function Round({
   }, [audioFile.current]);
 
   const handleOnClick = (id: number) => {
-    clearTimeout(clock);
+    clearTimeoutList();
     audioFile.current.pause();
     setguess(id);
     const time = (Date.now() - start.current) / 1000;
@@ -100,22 +114,27 @@ export default function Round({
   };
 
   useEffect(() => {
-    setGuessState("NO_GUESS");
-    isArtist.current = Math.floor(Math.random() * 2) === 1;
-    if (
-      isArtist.current &&
-      songChoices.length === 2 &&
-      songChoices[0].artist.name === songChoices[1].artist.name
-    ) {
-      isArtist.current = false;
+    if (guessState === "") {
+      setGuessState("NO_GUESS");
+      isArtist.current = Math.floor(Math.random() * 2) === 1;
+      // Should validate if all the choices have the same artist
+      if (
+        isArtist.current &&
+        songChoices.length === 2 &&
+        songChoices[0].artist.name === songChoices[1].artist.name
+      ) {
+        isArtist.current = false;
+      }
+      audioFile.current = new Audio(songChoices[correctSong].preview);
+      audioFile.current.addEventListener("timeupdate", timeUpdateHandler);
+      audioFile.current.addEventListener(
+        "canplaythrough",
+        canPlayThroughHandler
+      );
+      //audioFile.current.crossOrigin = "anonymous";
     }
-    // Should validate if all the choices have the same artist
-    audioFile.current = new Audio(songChoices[correctSong].preview);
-    audioFile.current.addEventListener("timeupdate", timeUpdateHandler);
-    audioFile.current.addEventListener("canplaythrough", canPlayThroughHandler);
-    //audioFile.current.crossOrigin = "anonymous";
-    
     return () => {
+      clearTimeoutList();
       resetAudio();
     };
   }, []);
@@ -132,82 +151,93 @@ export default function Round({
             <span>Loading...</span>
           ) : (
             <div>
-              <h1 className="text-3xl font-bold mb-6 text-sky-500 text-shadow-black text-center">{`${decodeURIComponent(genre)}`}</h1>
+              <h1 className="text-3xl font-bold mb-6 text-sky-500 text-shadow-black text-center">{`${decodeURIComponent(
+                genre
+              )}`}</h1>
               <div className="bg-gray-200 w-full h-36 md:h-48 rounded-md mb-6 p-2">
-              {guessState !== "NO_GUESS" ? (
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center justify-center bg-pink-300 p-1 rounded-md h-32 w-32 md:h-44 md:w-44">
-                    <img
-                      className="w-full h-full rounded-md"
-                      src={songChoices[correctSong].album.cover}
-                      alt="Music Cover"
-                    />
-                  </div>
-                  <div className="flex-grow text-gray-800 space-y-1 md:space-y-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-pink-500 font-semibold">Round #{round + 1}</span>
-                      
-                    </div>
-                    
-                    <h3 className="text-md md:text-lg font-bold mb-2">
-                      {songChoices[correctSong].title_short} by <span className="text-sky-700">{songChoices[correctSong].artist.name}</span>
-                    </h3>
-                    <div className="bg-white w-full h-1 rounded-lg">
-                      <div
-                        className="bg-pink-500 h-full rounded-lg"
-                        style={{ width: `${progress}%` }}
+                {guessState !== "NO_GUESS" ? (
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center bg-pink-300 p-1 rounded-md h-32 w-32 md:h-44 md:w-44">
+                      <img
+                        className="w-full h-full rounded-md"
+                        src={songChoices[correctSong].album.cover}
+                        alt="Music Cover"
                       />
                     </div>
+                    <div className="flex-grow text-gray-800 space-y-1 md:space-y-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-pink-500 font-semibold">
+                          Round #{round + 1}
+                        </span>
+                      </div>
 
-                    <div>
-                      <Link
-                        href={songChoices[correctSong].link}
-                        passHref={true}
-                        target="_blank"
-                        className="!inline-block"
-                      >
-                        <div className="border border-slate-800 flex items-center gap-1 text-sm rounded-md mt-2 px-2">
-                          <span className="font-bold">Listen on</span>
-                          <Image
-                            className="h-4 w-16"
-                            src={logo}
-                            alt="Deezer Logo"
-                          />
-                        </div>
-                      </Link>
+                      <h3 className="text-md md:text-lg font-bold mb-2">
+                        {songChoices[correctSong].title_short} by{" "}
+                        <span className="text-sky-700">
+                          {songChoices[correctSong].artist.name}
+                        </span>
+                      </h3>
+                      <div className="bg-white w-full h-1 rounded-lg">
+                        <div
+                          className="bg-pink-500 h-full rounded-lg"
+                          style={{ width: `${progress}%` }}
+                        />
+                      </div>
+
+                      <div>
+                        <Link
+                          href={songChoices[correctSong].link}
+                          passHref={true}
+                          target="_blank"
+                          className="!inline-block"
+                        >
+                          <div className="border border-slate-800 flex items-center gap-1 text-sm rounded-md mt-2 px-2">
+                            <span className="font-bold">Listen on</span>
+                            <Image
+                              className="h-4 w-16"
+                              src={logo}
+                              alt="Deezer Logo"
+                            />
+                          </div>
+                        </Link>
+                      </div>
                     </div>
-
                   </div>
-                </div>
-              ): (
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center justify-center bg-pink-300 rounded-md h-32 w-32 md:h-44 md:w-44">
-                    {isArtist.current ? (
-                      <IconVinyl className="w-12 h-12 text-pink-500"/>
-                    ): (
-                      <IconMusic className="w-12 h-12 text-pink-500"/>
-                    )}
-                  </div>
-                  <div className="flex-grow text-gray-800">
-                    <span className="text-pink-500 font-semibold">Round #{round + 1}</span>
-                    <h3 className="text-xl font-bold mb-2">
-                      Guess the {isArtist.current ? "Artist" : "Song"}...
-                    </h3>
-                    {/* <div className="bg-white w-full h-3 rounded-lg">
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center bg-pink-300 rounded-md h-32 w-32 md:h-44 md:w-44">
+                      {isArtist.current ? (
+                        <IconVinyl className="w-12 h-12 text-pink-500" />
+                      ) : (
+                        <IconMusic className="w-12 h-12 text-pink-500" />
+                      )}
+                    </div>
+                    <div className="flex-grow text-gray-800">
+                      <span className="text-pink-500 font-semibold">
+                        Round #{round + 1}
+                      </span>
+                      <h3 className="text-xl font-bold mb-2">
+                        Guess the {isArtist.current ? "Artist" : "Song"}...
+                      </h3>
+                      {/* <div className="bg-white w-full h-3 rounded-lg">
                       <div
                         className="bg-pink-500 h-full rounded-lg"
                         style={{ width: `${progress}%` }}
                       />
                     </div> */}
-                    <CanvasProgressBar progress={progress} />
+                      <CanvasProgressBar progress={progress} />
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
               </div>
 
               {guessState !== "NO_GUESS" && (
                 <div className="mb-4 text-center">
-                  <span className={`block text-white font-semibold rounded-md px-2 ${guessState === "CORRECT" ? "bg-teal-600" : "bg-rose-600"}`}>
+                  <span
+                    className={`block text-white font-semibold rounded-md px-2 ${
+                      guessState === "CORRECT" ? "bg-teal-600" : "bg-rose-600"
+                    }`}
+                  >
                     {guessState === "CORRECT"
                       ? "You got it!"
                       : "Better luck next time!"}
