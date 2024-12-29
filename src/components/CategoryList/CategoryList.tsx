@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import { getApiRadioList } from "../../app/helpers/functions";
+import { getApiRadioList } from "@/helpers/functions";
 import { IconArrowBack, IconArrowBackUp } from "@tabler/icons-react";
 import { categoryType } from "@/types/deezerApiTypes";
 import Link from "next/link";

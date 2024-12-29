@@ -1,7 +1,7 @@
 "use client";
 import { useCallback } from "react";
 import { useMatch } from "@/contexts/MatchContext";
-import { getSongs } from "../../app/helpers/functions";
+import { getSongs } from "@/helpers/functions";
 import { categoryType } from "@/types/deezerApiTypes";
 import { useRouter } from "next/navigation";
 import GameButton from "../Common/GameButton";

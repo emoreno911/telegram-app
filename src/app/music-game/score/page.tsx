@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { roundType, useMatch } from "@/contexts/MatchContext";
-import { useLocalStorage } from "@/app/hooks/useLocalStorage";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { Page } from "@/components/Page";
 import Link from "next/link";
 import GameContainer from "@/components/Common/GameContainer";

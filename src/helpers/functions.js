@@ -1,4 +1,4 @@
-import radioListDataMockup from "../api/radio_list/radio_list_data_mockup.json";
+import radioListDataMockup from "@/app/api/radio_list/radio_list_data_mockup.json";
 
 const mockup = true;
 
