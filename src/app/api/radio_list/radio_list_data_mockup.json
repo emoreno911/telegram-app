@@ -63,15 +63,15 @@
       "type": "radio"
     },
     {
-      "id": "37051",
-      "title": "Salsa",
-      "picture": "https://api.deezer.com/radio/37051/image",
-      "picture_small": "https://cdn-images.dzcdn.net/images/misc/67bedf50ce0a352e6631ad04abf6d97b/56x56-000000-80-0-0.jpg",
-      "picture_medium": "https://cdn-images.dzcdn.net/images/misc/67bedf50ce0a352e6631ad04abf6d97b/250x250-000000-80-0-0.jpg",
-      "picture_big": "https://cdn-images.dzcdn.net/images/misc/67bedf50ce0a352e6631ad04abf6d97b/500x500-000000-80-0-0.jpg",
-      "picture_xl": "https://cdn-images.dzcdn.net/images/misc/67bedf50ce0a352e6631ad04abf6d97b/1000x1000-000000-80-0-0.jpg",
-      "tracklist": "https://api.deezer.com/radio/37051/tracks",
-      "md5_image": "67bedf50ce0a352e6631ad04abf6d97b",
+      "id": "30851",
+      "title": "Techno",
+      "picture": "https://api.deezer.com/radio/30851/image",
+      "picture_small": "https://cdn-images.dzcdn.net/images/misc/cc1e1ce068b4888fcf5c562ec167dd07/56x56-000000-80-0-0.jpg",
+      "picture_medium": "https://cdn-images.dzcdn.net/images/misc/cc1e1ce068b4888fcf5c562ec167dd07/250x250-000000-80-0-0.jpg",
+      "picture_big": "https://cdn-images.dzcdn.net/images/misc/cc1e1ce068b4888fcf5c562ec167dd07/500x500-000000-80-0-0.jpg",
+      "picture_xl": "https://cdn-images.dzcdn.net/images/misc/cc1e1ce068b4888fcf5c562ec167dd07/1000x1000-000000-80-0-0.jpg",
+      "tracklist": "https://api.deezer.com/radio/30851/tracks",
+      "md5_image": "cc1e1ce068b4888fcf5c562ec167dd07",
       "type": "radio"
     },
     {

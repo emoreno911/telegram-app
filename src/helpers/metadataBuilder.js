@@ -34,7 +34,7 @@ export async function uploadJsonMetadata({
         const { IpfsHash } = await response.json();
         const tokenUri = `https://gateway.pinata.cloud/ipfs/${IpfsHash}`;
         //const ipfsUri = `ipfs://${IpfsHash}`;
-        console.log("IpfsHash generated")
+        console.log("IpfsHash generated", tokenUri)
         return tokenUri;
     } catch (error) {
         console.error(error);

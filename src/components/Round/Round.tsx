@@ -6,6 +6,7 @@ import logo from "../../app/_assets/logos/deezer_logo.png";
 import Image from "next/image";
 import { IconMusic, IconVinyl } from "@tabler/icons-react";
 import CanvasProgressBar from "../Common/CanvasProgressBar";
+import { calculateScore } from "@/helpers/utils";
 
 type propTypes = {
   genre: string;
@@ -103,7 +104,7 @@ export default function Round({
         round,
         guessed,
         time,
-        points: guessed ? Math.round(state.timeToGuess - time * 0.75) : 0,
+        points: guessed ? calculateScore(time, state.timeToGuess) : 0,
       },
     });
     setGuessState(guessed ? "CORRECT" : "INCORRECT");

@@ -28,7 +28,8 @@ const GameRound = () => {
           album: songChoices[correctSong].album.title,
         };
       });
-      return newLog;
+      return {newLog, category: state.category};
+      //return newLog
     };
 
     setStoredLog(cleanLog(state.roundList));

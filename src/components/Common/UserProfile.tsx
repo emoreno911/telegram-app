@@ -1,7 +1,11 @@
+"use client"
+
 import { IconClock, IconHome, IconStar, IconTrophy } from "@tabler/icons-react"
 import ScrollableContainer from "./ScrollableContainer"
 import MatchHistory from "./MatchHistory"
 import Link from "next/link"
+import { useDapp } from "@/contexts/DappContext"
+import { CONTRACT_ADDRESS } from "@/constants"
 
 interface ProfileCardProps {
   avatarUrl: string
@@ -54,37 +58,68 @@ const matchHistory = [
   { id: 1, score: 850, averageTime: "1:45", totalPoints: 12000, date: "2023-06-01" },
   { id: 2, score: 920, averageTime: "1:30", totalPoints: 13500, date: "2023-06-02" },
   { id: 3, score: 780, averageTime: "1:55", totalPoints: 11000, date: "2023-06-03" },
-  { id: 4, score: 1050, averageTime: "1:20", totalPoints: 15000, date: "2023-06-04" },
-  { id: 5, score: 890, averageTime: "1:40", totalPoints: 12500, date: "2023-06-05" },
-  { id: 6, score: 960, averageTime: "1:35", totalPoints: 14000, date: "2023-06-06" },
-  { id: 7, score: 820, averageTime: "1:50", totalPoints: 11500, date: "2023-06-07" },
-  { id: 8, score: 1100, averageTime: "1:15", totalPoints: 16000, date: "2023-06-08" },
-  { id: 9, score: 930, averageTime: "1:25", totalPoints: 13000, date: "2023-06-09" },
-  { id: 10, score: 1000, averageTime: "1:30", totalPoints: 14500, date: "2023-06-10" },
 ]
 
 export default function UserProfile() {
-    return (
-			<ScrollableContainer>
-        <div className="absolute top-6 left-3 z-10">
-          <Link href={`/`}>
-            <button type="button">
-              <IconHome className="w-8 h-8" />
-            </button>
-          </Link>
+  const { profileToken } = useDapp();
+
+  if (profileToken === null) {
+    return (<div className="z-10">
+      <p className="text-3xl font-bold text-sky-500 text-shadow-black text-center mt-2">Please connect your wallet to show your profile</p>
+      <Link href="/">
+        <button
+          className="mx-auto bg-slate-100 text-gray-800 flex items-center justify-center text-center text-lg font-bold uppercase rounded-lg py-4 px-6 mt-4"
+        >
+          Back to Home
+        </button>
+      </Link>
+    </div>)
+  }
+
+  return (
+    <ScrollableContainer>
+      <div className="absolute top-6 left-3 z-10">
+        <Link href={`/`}>
+          <button type="button">
+            <IconHome className="w-8 h-8" />
+          </button>
+        </Link>
+      </div>
+
+      {/* <GameProfileCard 
+        avatarUrl="https://avatar.iran.liara.run/public/girl"
+        username={profileToken.username}
+        topScore={profileToken.bestScore}
+        totalPoints={profileToken.totalScore}
+        averageTime={profileToken.avgTime}
+      /> */}
+
+      <h2 className="text-3xl font-bold text-sky-500 text-shadow-black text-center mt-2">Your Profile</h2>
+
+      <div className="flex flex-col items-center justify-center my-5 box-shadow-black">
+        <div className="p-3 rounded-md bg-slate-100 text-gray-800">
+        <img src={profileToken.image} className="w-80 h-80 rounded-md" alt={"nft profile"}/>
+        <h3 className="text-center text-xl font-bold py-4">{`${profileToken.symbol} #${profileToken.id}`}</h3>
         </div>
+      </div>
 
-        <GameProfileCard 
-          avatarUrl="https://avatar.iran.liara.run/public/girl"
-          username="PandoraRomanov"
-          topScore={15}
-          totalPoints={120}
-          averageTime={4.5}
-        />
+      {profileToken !== null && (
+        <div className="flex items-center justify-center">
+          <a href={`https://opbnb.bscscan.com/nft/${CONTRACT_ADDRESS}/${profileToken.id}`} target="_blank">
+            <div className="z-10 text-white mb-4 px-4 py-1 bg-sky-600 text-sm rounded-md flex items-center gap-1 box-shadow-custom">
+              <img 
+                src="https://opbnb.bscscan.com/assets/opbnb/images/svg/logos/token-light.svg"
+                className="h-4 w-4"
+                alt="opBNB symbol"
+              />
+              <span>{"Check in Explorer"}</span>
+            </div>
+          </a>
+        </div>
+      )}
 
-        {/* Latest scores */}
-        <MatchHistory matches={matchHistory} />
-			</ScrollableContainer>
-    )
+      {/* <MatchHistory matches={matchHistory} /> */}
+    </ScrollableContainer>
+  )
 }
 

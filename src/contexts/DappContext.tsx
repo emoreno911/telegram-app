@@ -14,6 +14,7 @@ import type { WalletTgSdk } from "@uxuycom/web3-tg-sdk";
 import { uploadJsonMetadata } from "../helpers/metadataBuilder";
 import { CHAINS, DEFAULT_CHAIN_ID, CONTRACT_ABI, CONTRACT_ADDRESS } from "../constants";
 import { useSignal, initData, type User } from '@telegram-apps/sdk-react';
+import { sleep } from "@/helpers/utils";
 
 
 const defaultChainConfig = CHAINS.find(
@@ -49,6 +50,7 @@ interface IDappContextState {
 interface IProfileToken {
 	id: number;
 	uri: string;
+	image: string;
 	symbol: string;
 	username: string;
 	bestScore: number;
@@ -193,8 +195,8 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 					const addr = accounts[0];
 					setAddress(addr);
 					setChainId(DEFAULT_CHAIN_ID)
+					await checkOrMintProfile(addr)
 					setBtnLoading(false)
-					checkOrMintProfile(addr)
 				}, 1000);
 
 				return;
@@ -284,6 +286,8 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 		const profile = await checkProfile(address);
 		if (!profile.error && profile.data === null) { // mint new profile
 			const username = initDataState?.user?.username || initDataState?.user?.id;
+			console.log(username)
+			//return
 			const response = await mintProfile(address, username as string)
 			if (response.error) {
 				showNotification('An error occurred while minting the token')
@@ -291,6 +295,10 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 			else {
 				showNotification('Profile minted successfully!!')
 			}
+		}
+
+		if (profile.data !== null) {
+			console.log("Profile loaded", profile.data)
 		}
 	}
 
@@ -326,18 +334,19 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 			if (fetchedTokens.length > 0) {
 				const nftData = fetchedTokens[0];
 				const metadataRequest = await fetch(nftData.uri);
-				const {attributes:
-					{ username, bestScore, totalScore, avgTime }
-				} = await metadataRequest.json();
+
+				const {image, attributes} = await metadataRequest.json();
+				const [user, best, total, avg] = attributes;
 
 				const data = {
 					id: parseInt(nftData.id),
 					uri: nftData.uri,
+					image,
 					symbol,
-					username,
-					bestScore,
-					totalScore,
-					avgTime
+					username: user.value,
+					bestScore: best.value,
+					totalScore: total.value,
+					avgTime: avg.value
 				}
 				
 				setProfileToken(data)
