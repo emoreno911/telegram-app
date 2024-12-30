@@ -11,9 +11,11 @@ import React, {
 
 import { ethers } from "ethers";
 import type { WalletTgSdk } from "@uxuycom/web3-tg-sdk";
-import { CHAINS } from "../constants";
+import { uploadJsonMetadata } from "../helpers/metadataBuilder";
+import { CHAINS, DEFAULT_CHAIN_ID, CONTRACT_ABI, CONTRACT_ADDRESS } from "../constants";
+import { useSignal, initData, type User } from '@telegram-apps/sdk-react';
 
-const DEFAULT_CHAIN_ID = "0xcc"; // opBNB
+
 const defaultChainConfig = CHAINS.find(
   (chain) => String(chain.chainId) === DEFAULT_CHAIN_ID
 );
@@ -24,14 +26,16 @@ export interface IDappContext {
 	setLoaderMessage: (val: string) => void;
 
 	state: IDappContextState;
+	profileToken: IProfileToken | null;
 	btnLoading: boolean;
 	signMessageContext: string;
 	verifyMessageResult: string;
 	connectWallet: () => void;
 	disconnectWallet: () => void;
-	setSignMessageContext: (val: string) => void;
 	signMessage: () => void;
 	verifySignMessage: () => void;
+	setSignMessageContext: (val: string) => void;
+	checkProfile: (val: string) => void;
 }
 
 interface IDappContextState {
@@ -42,10 +46,26 @@ interface IDappContextState {
 	chainRPCs: string[] | null | undefined;
 }
 
+interface IProfileToken {
+	id: number;
+	uri: string;
+	symbol: string;
+	username: string;
+	bestScore: number;
+	totalScore: number;
+	avgTime: number;
+}
+
+interface Token {
+  id: string;
+  uri: string;
+}
+
 const DappContext = createContext({} as IDappContext);
 export const useDapp = () => useContext(DappContext);
 
 const DappProvider = ({ children }: PropsWithChildren<{}>) => {
+	const initDataState = useSignal(initData.state);
     const [tgSdk, setTgSdk] = useState<WalletTgSdk | null>(null);
     const [address, setAddress] = useState("");
     const [loaderMessage, setLoaderMessage] = useState("");
@@ -59,6 +79,7 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
         chainRPCs: defaultChainConfig?.chainRPCs,
     });
 
+	const [profileToken, setProfileToken] = useState<IProfileToken | null>(null);
     const [signMessageContext, setSignMessageContext] = useState("Hello world");
     const [btnLoading, setBtnLoading] = useState(false);
     const [verifyMessageResult, setVerifyMessageResult] = useState("");
@@ -153,6 +174,31 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 
     // Connect Wallet Event
     const connectWallet = async () => {
+			// browser estension mockup
+			if (window?.ethereum) {
+				setBtnLoading(true);
+				setTimeout(async () => {
+					// await window?.ethereum.request({
+					// 	method: "eth_requestAccounts",
+					// 	params: [],
+					// });
+					const accounts = await window?.ethereum.request({
+						method: "eth_accounts",
+						params: [],
+					});
+					await window?.ethereum.request({
+						method: "wallet_switchEthereumChain",
+						params: [{ chainId: DEFAULT_CHAIN_ID }],
+					});
+					const addr = accounts[0];
+					setAddress(addr);
+					setChainId(DEFAULT_CHAIN_ID)
+					setBtnLoading(false)
+					checkOrMintProfile(addr)
+				}, 1000);
+
+				return;
+			}
 			//if(btnLoadingConnect) return
 			setBtnLoading(true);
 			try {
@@ -173,6 +219,7 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 					setChainId(chainId);
 					showNotification("Wallet connected successfully");
 					switchChain(DEFAULT_CHAIN_ID);
+					checkOrMintProfile(accounts[0])
 			} catch (error) {
 					console.error("Connection failed:", error);
 					showNotification("Failed to connect wallet", false);
@@ -181,7 +228,7 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
     };
 
     const disconnectWallet = () => {
-        tgSdk?.ethereum?.disconnect && tgSdk?.ethereum?.disconnect?.();
+      tgSdk?.ethereum?.disconnect && tgSdk?.ethereum?.disconnect?.();
     };
 
     // Switch chian Event
@@ -219,7 +266,7 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 			setBtnLoading(false);
     };
 
-    function verifySignMessage() {
+    const verifySignMessage = () => {
 			if (!state.signature) {
 					showNotification("Please sign first");
 					return;
@@ -232,6 +279,114 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 			setVerifyMessageResult(recoveredAddress);
     }
 
+	const checkOrMintProfile = async (address:string) => {
+		console.log("Loading...")
+		const profile = await checkProfile(address);
+		if (!profile.error && profile.data === null) { // mint new profile
+			const username = initDataState?.user?.username || initDataState?.user?.id;
+			const response = await mintProfile(address, username as string)
+			if (response.error) {
+				showNotification('An error occurred while minting the token')
+			}
+			else {
+				showNotification('Profile minted successfully!!')
+			}
+		}
+	}
+
+	const checkProfile = async (address: string) => {
+		try {
+			if (!ethers.isAddress(address)) {
+				console.log('Invalid Ethereum address')
+				return { error: true, data: null }
+			}
+
+			const provider = new ethers.BrowserProvider(window?.ethereum)
+			const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider)
+			
+			const symbol = await contract.symbol()
+			const name = await contract.name()
+			const balance = await contract.balanceOf(address)
+
+			const tokenPromises: Promise<Token>[] = []
+
+			for (let i = 0; i < balance; i++) {
+				tokenPromises.push(
+					(async () => {
+						const tokenId = await contract.tokenOfOwnerByIndex(address, i)
+						const tokenURI = await contract.tokenURI(tokenId)
+						return { id: tokenId.toString(), uri: tokenURI }
+					})()
+				)
+			}
+
+			const fetchedTokens = await Promise.all(tokenPromises)
+			//console.log({symbol, name, tokens:fetchedTokens})
+
+			if (fetchedTokens.length > 0) {
+				const nftData = fetchedTokens[0];
+				const metadataRequest = await fetch(nftData.uri);
+				const {attributes:
+					{ username, bestScore, totalScore, avgTime }
+				} = await metadataRequest.json();
+
+				const data = {
+					id: parseInt(nftData.id),
+					uri: nftData.uri,
+					symbol,
+					username,
+					bestScore,
+					totalScore,
+					avgTime
+				}
+				
+				setProfileToken(data)
+				return { error: false, data }
+			}
+			else {
+				return { error: false, data: null }
+			}
+		} catch (err) {
+			console.error(err)
+			return { error: true, data: null }
+		}
+	}
+
+	const mintProfile = async (to: string, username: string) => {
+		try {
+			const tokenUri:string = await uploadJsonMetadata({ username })
+			if (tokenUri === "") {
+				return {
+					error: true,
+					data: "UPLOAD_ERROR"
+				}
+			}
+
+			const response = await fetch('/api/token', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ fn: "mint", data: { to, tokenUri } }),
+			})
+	
+			const data = await response.json()
+	
+			if (!response.ok) {
+				console.error(data.error || 'An error occurred while minting the token')
+				return { error: true }
+			}
+			else {
+				console.log(data)
+				return { error: false, data }
+			}
+			
+		} catch (err) {
+			console.error(err)
+			return { error: true }
+		}
+	}
+
     const exposedVars = {
 			loaderMessage,
 			setLoaderMessage,
@@ -239,13 +394,15 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 			state,
 			address,
 			btnLoading,
+			profileToken,
 			signMessageContext,
 			verifyMessageResult,
 			connectWallet,
 			disconnectWallet,
 			setSignMessageContext,
-			signMessage,
 			verifySignMessage,
+			signMessage,
+			checkProfile
     };
 
     return (

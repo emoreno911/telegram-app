@@ -22,7 +22,8 @@
     "next-intl": "^3.17.6",
     "normalize.css": "^8.0.1",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "viem": "^2.21.58"
   },
   "devDependencies": {
     "@types/node": "^20",

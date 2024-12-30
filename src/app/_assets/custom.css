@@ -24,6 +24,10 @@
 	text-shadow: 2px 2px 3px #ffffffcc;
 }
 
+.box-shadow-custom {
+	box-shadow: 2px 2px 3px 2px #00000088;
+}
+
 .home-title-margin {
 	margin-top: -15px;
 }
