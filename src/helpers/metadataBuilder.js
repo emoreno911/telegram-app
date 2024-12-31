@@ -35,10 +35,10 @@ export async function uploadJsonMetadata({
         const tokenUri = `https://gateway.pinata.cloud/ipfs/${IpfsHash}`;
         //const ipfsUri = `ipfs://${IpfsHash}`;
         console.log("IpfsHash generated", tokenUri)
-        return tokenUri;
+        return {tokenUri, base64};
     } catch (error) {
         console.error(error);
-        return "";
+        return {tokenUri:"", base64: ""};
     }
 }
 

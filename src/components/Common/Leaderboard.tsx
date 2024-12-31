@@ -1,38 +1,52 @@
-import React from 'react'
-import { IconHome, IconMedal, IconTrophy } from '@tabler/icons-react'
+"use client"
+import React, { useEffect, useState } from 'react'
+import { IconHome, IconMedal, IconSquareRoundedArrowLeft, IconTrophy } from '@tabler/icons-react'
+import { getLeaderboard } from "@/helpers/service";
 import ScrollableContainer from './ScrollableContainer'
 import Link from 'next/link'
+import { useDapp } from '@/contexts/DappContext';
+
 
 interface User {
-  id: number
-  name: string
-  avatar: string
-  points: number
+  nft_id: string
+  username: string
+  total: number
+  avg: number
+  best: number
 }
 
-interface LeaderboardProps {
-  currentUser: User
-  topUsers: User[]
-}
+export default function Leaderboard() {
+  const { profileToken } = useDapp();
+  const [topUsers, setTopUsers] = useState<User[]>([]);
+  const [loaderMessage, setLoaderMessage] = useState<string|null>(null);
 
-export default function Leaderboard({ currentUser, topUsers }: LeaderboardProps) {
-  const getUserRank = (user: User) => topUsers.findIndex((u) => u.id === user.id) + 1
+  useEffect(() => {
+    initLeaderboard()
+  }, [])
 
-  const currentUserRank = getUserRank(currentUser)
+  const initLeaderboard = async () => {
+    
+    setLoaderMessage("Getting data...");
+    const response = await getLeaderboard();
+    setLoaderMessage(null);
+    if (!response.error) {
+      setTopUsers(response.data);
+      //console.log(response)
+    }
+    else {
+        console.log("error")
+    }
+  }
 
   return (
     <ScrollableContainer>
-      <div className="absolute top-6 left-3 z-10">
+      <div className="flex justify-center items-center gap-2 mb-8">
         <Link href={`/`}>
           <button type="button">
-            <IconHome className="w-8 h-8" />
+            <IconSquareRoundedArrowLeft className="w-8 h-8" />
           </button>
         </Link>
-      </div>
-
-      <div className="flex flex-col items-center mb-8">
-        {/* <IconTrophy className="w-16 h-16 text-yellow-500 mb-2" /> */}
-        <h1 className="text-3xl font-bold font-gaming text-sky-500 text-shadow-black">Leaderboard</h1>
+        <h1 className="flex-grow text-3xl font-bold text-center text-sky-500 text-shadow-black">Leaderboard</h1>
       </div>
 
       <div className="w-full grid grid-cols-2 gap-4 text-center rounded-lg bg-zinc-700 p-2 mb-6">
@@ -41,24 +55,28 @@ export default function Leaderboard({ currentUser, topUsers }: LeaderboardProps)
       </div>
 
       {/* Current User Card */}
-      <div className="bg-gray-700 p-4 rounded-lg shadow mb-6 flex items-center justify-between" style={{backgroundColor:"#E91E63"}}>
-        <div className="flex items-center space-x-4">
-          <img src={"/GTB_logo_512.png"} alt={currentUser.name} className="w-12 h-12 rounded-full" style={{backgroundColor:"#ebebeb"}} />
-          <div>
-            <p className="font-semibold text-lg">{currentUser.name}</p>
-            <p className="text-gray-400">You</p>
+      {profileToken !== null && (
+        <div className="bg-gray-700 p-4 rounded-lg shadow mb-6 flex items-center justify-between" style={{backgroundColor:"#E91E63"}}>
+          <div className="flex items-center space-x-4">
+            <img src={"/GTB_logo_512.png"} alt={profileToken.username} className="w-12 h-12 rounded-full" style={{backgroundColor:"#ebebeb"}} />
+            <div>
+              <p className="font-semibold text-lg">{profileToken.username}</p>
+              <p className="text-gray-400">You</p>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="font-bold text-2xl">{profileToken.totalScore}</p>
+            <p className="text-sm text-gray-400">Total Points</p>
           </div>
         </div>
-        <div className="text-right">
-          <p className="font-bold text-2xl">{currentUser.points}</p>
-          <p className="text-sm text-gray-400">Rank #{currentUserRank}</p>
-        </div>
-      </div>
+      )}
+
+      <div className="py-4">{loaderMessage}</div>
 
       {/* Top Users List */}
       <div className="space-y-1">
         {topUsers.map((user, index) => (
-          <div key={user.id} className={`p-4 rounded-lg shadow flex items-center justify-between ${index < 3 ? "bg-sky-700/75" : "bg-sky-500/75"}`}>
+          <div key={user.nft_id} className={`p-4 rounded-lg shadow flex items-center justify-between ${index < 3 ? "bg-sky-700/75" : "bg-sky-500/75"}`}>
             <div className="flex items-center space-x-4">
               <span className="font-bold text-lg w-6 text-center">{index + 1}</span>
               {index < 3 ? (
@@ -68,12 +86,12 @@ export default function Leaderboard({ currentUser, topUsers }: LeaderboardProps)
                   'bg-yellow-700'
                 }`} />
               ) : (
-                <img src={"/GTB_logo_512.png"} alt={user.name} className="w-12 h-12 rounded-full" />
+                <img src={"/GTB_logo_512.png"} alt={user.username} className="w-12 h-12 rounded-full" />
               )}
-              <p className="font-semibold">{user.name}</p>
+              <p className="font-semibold">{user.username}</p>
             </div>
             <div className="flex items-center space-x-4">
-              <p className="font-bold text-xl">{user.points}</p>
+              <p className="font-bold text-xl">{user.total}</p>
             </div>
           </div>
         ))}

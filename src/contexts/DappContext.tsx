@@ -15,6 +15,7 @@ import { uploadJsonMetadata } from "../helpers/metadataBuilder";
 import { CHAINS, DEFAULT_CHAIN_ID, CONTRACT_ABI, CONTRACT_ADDRESS } from "../constants";
 import { useSignal, initData, type User } from '@telegram-apps/sdk-react';
 import { sleep } from "@/helpers/utils";
+import { getLastMatches, getPointsAndAvg, insertMatch, updateLeaderboard } from "@/helpers/service";
 
 
 const defaultChainConfig = CHAINS.find(
@@ -27,6 +28,7 @@ export interface IDappContext {
 	setLoaderMessage: (val: string) => void;
 
 	state: IDappContextState;
+	profileImage: string | null;
 	profileToken: IProfileToken | null;
 	btnLoading: boolean;
 	signMessageContext: string;
@@ -37,6 +39,7 @@ export interface IDappContext {
 	verifySignMessage: () => void;
 	setSignMessageContext: (val: string) => void;
 	checkProfile: (val: string) => void;
+	updatePlayerStats: (val: string) => void;
 }
 
 interface IDappContextState {
@@ -50,12 +53,19 @@ interface IDappContextState {
 interface IProfileToken {
 	id: number;
 	uri: string;
-	image: string;
+	nftId: string;
 	symbol: string;
 	username: string;
 	bestScore: number;
 	totalScore: number;
 	avgTime: number;
+}
+
+interface IMetadataAttrs {
+	username: string | undefined
+	bestScore: number 
+	totalScore: number 
+	avgTime: number
 }
 
 interface Token {
@@ -81,6 +91,7 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
         chainRPCs: defaultChainConfig?.chainRPCs,
     });
 
+	const [profileImage, setProfileImage] = useState<string|null>(null)
 	const [profileToken, setProfileToken] = useState<IProfileToken | null>(null);
     const [signMessageContext, setSignMessageContext] = useState("Hello world");
     const [btnLoading, setBtnLoading] = useState(false);
@@ -340,8 +351,8 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 
 				const data = {
 					id: parseInt(nftData.id),
+					nftId: `${CONTRACT_ADDRESS}_${nftData.id}`,
 					uri: nftData.uri,
-					image,
 					symbol,
 					username: user.value,
 					bestScore: best.value,
@@ -350,6 +361,7 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 				}
 				
 				setProfileToken(data)
+				setProfileImage(image)
 				return { error: false, data }
 			}
 			else {
@@ -396,22 +408,131 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 		}
 	}
 
-    const exposedVars = {
-			loaderMessage,
-			setLoaderMessage,
+	const updatePlayerStats = async (matchDataJSON:string) => {
+		const {totals:[points, avg_time], cat_id, cat_name} = JSON.parse(matchDataJSON);
 
-			state,
-			address,
-			btnLoading,
-			profileToken,
-			signMessageContext,
-			verifyMessageResult,
-			connectWallet,
-			disconnectWallet,
-			setSignMessageContext,
-			verifySignMessage,
-			signMessage,
-			checkProfile
+		if (profileToken === null) {
+			showNotification("Please connect wallet to store scores")
+			return
+		}
+		
+		const oldScores = await getPointsAndAvg(profileToken?.nftId);
+		//const oldScores = await getPointsAndAvg("0x00000_5");
+		if (oldScores.error) {
+			console.log("Error getting old matches scores")
+			return;
+		}
+
+		const scores = [...oldScores.data, {points, avg_time}]
+		const result = scores.reduce((acc, current) => {
+			return {
+			  totalPoints: acc.totalPoints + current.points,
+			  totalTime: acc.totalTime + current.avg_time
+			};
+		}, { totalPoints: 0, totalTime: 0 });
+
+		const total = result.totalPoints;
+		const avg = result.totalTime / scores.length;
+		const best = Math.max(...scores.map(s => parseInt(s.points)));
+		const username = profileToken?.username;
+		const nft_id = profileToken?.nftId;
+
+		// add db rows
+		const matchAdd = await insertMatch({
+			nft_id,
+			username,
+			points,
+			avg_time,
+			cat_id,
+			cat_name
+		})
+
+		const leadUpdate = await updateLeaderboard({
+			nft_id,
+			username,
+			total,
+			best,
+			avg
+		})
+
+		if (leadUpdate.error || matchAdd.error) {
+			console.log("error", {leadUpdate}, {matchAdd})
+			return;
+		}
+
+		console.log("db updated", {leadUpdate}, {matchAdd})
+		await updateNftProfile({
+			username,
+			bestScore: best,
+			totalScore: total,
+			avgTime: parseFloat(avg.toFixed(3))
+		})
+
+		showNotification("Nft Profile updated")
+	}
+
+	const updateNftProfile = async (ndata:IMetadataAttrs) => {
+		try {
+			const {tokenUri, base64} = await uploadJsonMetadata(ndata)
+			if (tokenUri === "") {
+				return {
+					error: true,
+					data: "UPLOAD_ERROR"
+				}
+			}
+
+			const response = await fetch('/api/token', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ fn: "update", data: { id: profileToken?.id, tokenUri } }),
+			})
+	
+			const data = await response.json()
+	
+			if (!response.ok) {
+				console.error(data.error || 'An error occurred while minting the token')
+				return { error: true }
+			}
+			else {
+				console.log(data)
+				setProfileImage(base64)
+				setProfileToken(o => {
+					if (o !== null) {
+						o.bestScore = ndata.bestScore
+						o.totalScore = ndata.totalScore
+						o.avgTime = ndata.avgTime
+					}
+					return o
+				})
+				return { error: false, data }
+			}
+			
+		} catch (err) {
+			console.error(err)
+			return { error: true }
+		}
+	}
+
+    const exposedVars = {
+		loaderMessage,
+		setLoaderMessage,
+
+		state,
+		address,
+		btnLoading,
+		profileToken,
+		profileImage,
+		signMessageContext,
+		verifyMessageResult,
+		connectWallet,
+		disconnectWallet,
+		setSignMessageContext,
+		verifySignMessage,
+		signMessage,
+		checkProfile,
+		updatePlayerStats
     };
 
     return (

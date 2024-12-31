@@ -120,7 +120,7 @@ export type matchStateType = {
   guesses: number;
   songsPerGuess: number;
   step: number;
-  category: string;
+  category: any;
   roundList: roundType[];
 };
 

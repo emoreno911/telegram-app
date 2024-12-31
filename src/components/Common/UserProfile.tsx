@@ -1,6 +1,6 @@
 "use client"
 
-import { IconClock, IconHome, IconStar, IconTrophy } from "@tabler/icons-react"
+import { IconClock, IconHome, IconSquareRoundedArrowLeft, IconStar, IconTrophy } from "@tabler/icons-react"
 import ScrollableContainer from "./ScrollableContainer"
 import MatchHistory from "./MatchHistory"
 import Link from "next/link"
@@ -54,14 +54,8 @@ function GameProfileCard({
   )
 }
 
-const matchHistory = [
-  { id: 1, score: 850, averageTime: "1:45", totalPoints: 12000, date: "2023-06-01" },
-  { id: 2, score: 920, averageTime: "1:30", totalPoints: 13500, date: "2023-06-02" },
-  { id: 3, score: 780, averageTime: "1:55", totalPoints: 11000, date: "2023-06-03" },
-]
-
 export default function UserProfile() {
-  const { profileToken } = useDapp();
+  const { profileToken, profileImage } = useDapp();
 
   if (profileToken === null) {
     return (<div className="z-10">
@@ -78,27 +72,18 @@ export default function UserProfile() {
 
   return (
     <ScrollableContainer>
-      <div className="absolute top-6 left-3 z-10">
+      <div className="flex justify-center items-center gap-2 mb-8">
         <Link href={`/`}>
           <button type="button">
-            <IconHome className="w-8 h-8" />
+            <IconSquareRoundedArrowLeft className="w-8 h-8" />
           </button>
         </Link>
+        <h1 className="flex-grow text-3xl font-bold text-center text-sky-500 text-shadow-black">Your Profile</h1>
       </div>
-
-      {/* <GameProfileCard 
-        avatarUrl="https://avatar.iran.liara.run/public/girl"
-        username={profileToken.username}
-        topScore={profileToken.bestScore}
-        totalPoints={profileToken.totalScore}
-        averageTime={profileToken.avgTime}
-      /> */}
-
-      <h2 className="text-3xl font-bold text-sky-500 text-shadow-black text-center mt-2">Your Profile</h2>
 
       <div className="flex flex-col items-center justify-center my-5 box-shadow-black">
         <div className="p-3 rounded-md bg-slate-100 text-gray-800">
-        <img src={profileToken.image} className="w-80 h-80 rounded-md" alt={"nft profile"}/>
+        <img src={profileImage as string} className="w-80 h-80 rounded-md" alt={"nft profile"}/>
         <h3 className="text-center text-xl font-bold py-4">{`${profileToken.symbol} #${profileToken.id}`}</h3>
         </div>
       </div>
@@ -118,7 +103,9 @@ export default function UserProfile() {
         </div>
       )}
 
-      {/* <MatchHistory matches={matchHistory} /> */}
+      {profileToken !== null && (
+        <MatchHistory nftId={profileToken.nftId} />
+      )}
     </ScrollableContainer>
   )
 }

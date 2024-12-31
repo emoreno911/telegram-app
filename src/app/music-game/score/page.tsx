@@ -6,8 +6,10 @@ import { Page } from "@/components/Page";
 import Link from "next/link";
 import GameContainer from "@/components/Common/GameContainer";
 import ScrollableContainer from "@/components/Common/ScrollableContainer";
+import { useDapp } from "@/contexts/DappContext";
 
 const GameRound = () => {
+  const { updatePlayerStats } = useDapp();
   const [state, dispatch] = useMatch();
   const [, setStoredLog] = useLocalStorage("storedLog", []);
 
@@ -28,8 +30,23 @@ const GameRound = () => {
           album: songChoices[correctSong].album.title,
         };
       });
-      return {newLog, category: state.category};
-      //return newLog
+
+      const result = newLog.reduce((acc, current) => {
+        return {
+          totalPoints: acc.totalPoints + current.points,
+          totalTime: acc.totalTime + current.time
+        };
+      }, { totalPoints: 0, totalTime: 0 });
+
+      const sumArray = [result.totalPoints, result.totalTime/5];
+
+      updatePlayerStats(JSON.stringify({
+        totals: sumArray, 
+        cat_name: state.category.title,
+        cat_id: state.category.id
+      }))
+
+      return newLog
     };
 
     setStoredLog(cleanLog(state.roundList));
