@@ -31,6 +31,7 @@ Using this dynamic approach the metadata of the profile NFT is updated at the en
 - Now you can check the leaderboard to know if you are a top ten player. Will you be the best? If not... Keep playing!
 - For more info you can check our demo video https://youtu.be/b79rKa38XsA
 
+<img src="https://gateway.pinata.cloud/ipfs/bafybeie7l6yrqw7letfno3ejw4g7nomdkad3owlvmtm5yrfjtj2vgxu4ly" alt="screenshots" />
 
 ## Future plans
 
