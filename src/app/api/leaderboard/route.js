@@ -16,7 +16,7 @@ async function getTopTen() {
         const { data, error, status } = await supabase
             .from(tableName)
             .select(cols)
-            .order("total", { ascending: false })
+            .order("best", { ascending: false })
             .limit(10);
 
         if (error && status !== 406) {

@@ -16,6 +16,7 @@ import { CHAINS, DEFAULT_CHAIN_ID, CONTRACT_ABI, CONTRACT_ADDRESS } from "../con
 import { useSignal, initData, type User } from '@telegram-apps/sdk-react';
 import { sleep } from "@/helpers/utils";
 import { getLastMatches, getPointsAndAvg, insertMatch, updateLeaderboard } from "@/helpers/service";
+import { opBNB } from "viem/chains";
 
 
 const defaultChainConfig = CHAINS.find(
@@ -191,10 +192,10 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 			if (window?.ethereum) {
 				setBtnLoading(true);
 				setTimeout(async () => {
-					// await window?.ethereum.request({
-					// 	method: "eth_requestAccounts",
-					// 	params: [],
-					// });
+					await window?.ethereum.request({
+						method: "eth_requestAccounts",
+						params: [],
+					});
 					const accounts = await window?.ethereum.request({
 						method: "eth_accounts",
 						params: [],
@@ -232,7 +233,7 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 					setChainId(chainId);
 					showNotification("Wallet connected successfully");
 					switchChain(DEFAULT_CHAIN_ID);
-					checkOrMintProfile(accounts[0])
+					await checkOrMintProfile(accounts[0])
 			} catch (error) {
 					console.error("Connection failed:", error);
 					showNotification("Failed to connect wallet", false);
@@ -305,6 +306,10 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 			}
 			else {
 				showNotification('Profile minted successfully!!')
+				setTimeout(async () => {
+					const profile = await checkProfile(address)
+					console.log("Profile loaded", profile.data)
+				}, 5000);
 			}
 		}
 
@@ -320,7 +325,10 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 				return { error: true, data: null }
 			}
 
-			const provider = new ethers.BrowserProvider(window?.ethereum)
+			const provider = (window?.ethereum) ? 
+				new ethers.BrowserProvider(window?.ethereum) : 
+				new ethers.JsonRpcProvider(defaultChainConfig?.chainRPCs[0]);
+
 			const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider)
 			
 			const symbol = await contract.symbol()
@@ -334,13 +342,14 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 					(async () => {
 						const tokenId = await contract.tokenOfOwnerByIndex(address, i)
 						const tokenURI = await contract.tokenURI(tokenId)
+						console.log(tokenId, tokenURI)
 						return { id: tokenId.toString(), uri: tokenURI }
 					})()
 				)
 			}
 
 			const fetchedTokens = await Promise.all(tokenPromises)
-			//console.log({symbol, name, tokens:fetchedTokens})
+			console.log({symbol, name, tokens:fetchedTokens})
 
 			if (fetchedTokens.length > 0) {
 				const nftData = fetchedTokens[0];
@@ -360,6 +369,7 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 					avgTime: avg.value
 				}
 				
+				//console.log(data, attributes, image)
 				setProfileToken(data)
 				setProfileImage(image)
 				return { error: false, data }
@@ -375,7 +385,7 @@ const DappProvider = ({ children }: PropsWithChildren<{}>) => {
 
 	const mintProfile = async (to: string, username: string) => {
 		try {
-			const tokenUri:string = await uploadJsonMetadata({ username })
+			const {tokenUri} = await uploadJsonMetadata({ username })
 			if (tokenUri === "") {
 				return {
 					error: true,

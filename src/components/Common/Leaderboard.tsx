@@ -65,8 +65,8 @@ export default function Leaderboard() {
             </div>
           </div>
           <div className="text-right">
-            <p className="font-bold text-2xl">{profileToken.totalScore}</p>
-            <p className="text-sm text-gray-400">Total Points</p>
+            <p className="font-bold text-2xl">{profileToken.bestScore}</p>
+            <p className="text-sm text-gray-400">Best Score</p>
           </div>
         </div>
       )}
@@ -91,7 +91,7 @@ export default function Leaderboard() {
               <p className="font-semibold">{user.username}</p>
             </div>
             <div className="flex items-center space-x-4">
-              <p className="font-bold text-xl">{user.total}</p>
+              <p className="font-bold text-xl">{user.best}</p>
             </div>
           </div>
         ))}

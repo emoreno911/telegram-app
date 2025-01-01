@@ -84,7 +84,8 @@ export default function UserProfile() {
       <div className="flex flex-col items-center justify-center my-5 box-shadow-black">
         <div className="p-3 rounded-md bg-slate-100 text-gray-800">
         <img src={profileImage as string} className="w-80 h-80 rounded-md" alt={"nft profile"}/>
-        <h3 className="text-center text-xl font-bold py-4">{`${profileToken.symbol} #${profileToken.id}`}</h3>
+        <h3 className="text-center text-xl font-bold pt-4">{`${profileToken.symbol} #${profileToken.id}`}</h3>
+        <h3 className="text-center text-gray-500 pb-4">{"Guess The Beat Profiles"}</h3>
         </div>
       </div>
 

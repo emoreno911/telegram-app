@@ -7,9 +7,10 @@ import Link from "next/link";
 import GameContainer from "@/components/Common/GameContainer";
 import ScrollableContainer from "@/components/Common/ScrollableContainer";
 import { useDapp } from "@/contexts/DappContext";
+import { IconAlertTriangle, IconAlertTriangleFilled } from "@tabler/icons-react";
 
 const GameRound = () => {
-  const { updatePlayerStats } = useDapp();
+  const { profileToken, updatePlayerStats } = useDapp();
   const [state, dispatch] = useMatch();
   const [, setStoredLog] = useLocalStorage("storedLog", []);
 
@@ -109,14 +110,32 @@ const GameRound = () => {
             <p className="">Giving you a total of {points} Points!</p>
           </div>
         </div>
-        <Link href="/music-game">
-          <button
-            onClick={storeAndReset}
-            className="mx-auto bg-slate-100 text-gray-800 flex items-center justify-center text-center text-lg font-bold uppercase rounded-lg py-4 px-6 mt-4"
-          >
-            Back to the start!
-          </button>
-        </Link>
+        {profileToken === null && (
+          <div className="pt-4 text-center text-lg text-orange-400">
+            <p> <IconAlertTriangleFilled className="h-5 w-5 inline mr-1" /> <span>It seems your wallet isn't connected yet!</span></p>
+            <p>Please connect wallet to store your scores</p>
+          </div>
+        )}
+        <div className="flex justify-center gap-2">
+          {profileToken !== null && (
+            <Link href="/music-game">
+              <button
+                onClick={storeAndReset}
+                className="mx-auto bg-slate-100 text-gray-800 flex items-center justify-center text-center text-lg font-bold uppercase rounded-lg py-4 px-6 mt-4"
+              >
+                Play again!
+              </button>
+            </Link>
+          )}
+          <Link href="/">
+            <button
+              onClick={storeAndReset}
+              className="mx-auto bg-slate-100 text-gray-800 flex items-center justify-center text-center text-lg font-bold uppercase rounded-lg py-4 px-6 mt-4"
+            >
+              Back to Home
+            </button>
+          </Link>
+        </div>
         </div>
         </ScrollableContainer>
       </GameContainer>

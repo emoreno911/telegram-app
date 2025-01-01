@@ -8,9 +8,9 @@ export const CHAINS = [{
     chainName: "opBNB Chain",
     chainSymbol: "BNB",
     chainDecimals: 18,
-    chainRPCs: ["https://opbnb-rpc.publicnode.com", "https://opbnb-mainnet.nodereal.io/v1/e9a36765eb8a40b9bd12e680a1fd2bc5"],
+    chainRPCs: ["https://opbnb-mainnet-rpc.bnbchain.org", "https://opbnb-rpc.publicnode.com"],
     explorer: "https://opbnb.bscscan.com/",
-    profilesContract: "0x58c680c1e7132360079273962b46339766d314cb"
+    profilesContract: ""
 	},
   {
     chainId: "0x38",
@@ -24,7 +24,7 @@ export const CHAINS = [{
 }]
 
 export const DEFAULT_CHAIN_ID = "0xcc"; // opBNB
-export const CONTRACT_ADDRESS = "0xBdD2c336f0b9B82F8EB9DA8Ec5b4Aa76c5d46Fca";
+export const CONTRACT_ADDRESS = "0x27abe8439c6c8dbe842ba1fd47b1c05db6f71750";
 
 // export const CONTRACT_ABI = [
 //   "function name() view returns (string)",

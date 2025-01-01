@@ -5,7 +5,7 @@ export default function  GameContainer (
 ) { 
   return (
 		// <div className="relative h-screen flex flex-col items-center justify-center gap-3 bg-music-notes">
-		<div className="relative h-screen flex flex-col items-center justify-center gap-3 bg-music-notes font-cursive">
+		<div className="relative h-screen flex flex-col items-center justify-center gap-3 bg-music-notes text-gray-100 font-cursive">
 			<div className="w-full h-full absolute top-0 left-0 z-0" style={{backgroundColor: "#10021de6"}}></div>
     	{ children }
     </div>
