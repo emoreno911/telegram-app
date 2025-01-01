@@ -2,11 +2,11 @@
 
 Listen and prove your music knowledge on Telegram
 
-- **Demo Video** -> https://youtu.be/b79rKa38XsA
-- **Landing** -> https://guessthebeat.xyz
-- **Telegram app** -> https://t.me/GuessTheBeatBot/game
-- **TikTok** -> https://www.tiktok.com/@guessthebeatproject
-- **Profiles contract** -> https://opbnb.bscscan.com/address/0x27abe8439c6c8dbe842ba1fd47b1c05db6f71750
+- 📹 **Demo Video** -> https://youtu.be/b79rKa38XsA
+- 🌐 **Landing** -> https://guessthebeat.xyz
+- 📱 **Telegram app** -> https://t.me/GuessTheBeatBot/game
+- 🎶 **TikTok** -> https://www.tiktok.com/@guessthebeatproject
+- 💻 **Profiles contract** -> https://opbnb.bscscan.com/address/0x27abe8439c6c8dbe842ba1fd47b1c05db6f71750
 
 ## About the project
 
