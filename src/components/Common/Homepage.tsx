@@ -3,7 +3,7 @@ import GameButton from '@/components/Common/GameButton';
 import AnimatedLogo from '@/components/Common/AnimatedLogo';
 import { useDapp } from '@/contexts/DappContext';
 import { splitHexAddress } from '@/helpers/utils'
-import { IconCopy } from '@tabler/icons-react';
+import { IconCopy, IconExternalLink } from '@tabler/icons-react';
 
 
 export default function Homepage() {
@@ -30,17 +30,19 @@ export default function Homepage() {
 			<h3 className="font-bold text-xl font-cursive text-center text-sky-500 text-shadow-black mb-4 z-10 px-4 max-w-96">Test your music knowledge and become a Tune Master!</h3>
 			
 			{address && (
-				<div className="z-10 text-white mb-4 px-4 py-1 bg-sky-600 text-sm rounded-md flex items-center gap-1 box-shadow-custom">
-					<img 
-						src="https://opbnb.bscscan.com/assets/opbnb/images/svg/logos/token-light.svg"
-						className="h-4 w-4"
-						alt="opBNB symbol"
-					/>
-					<span>{splitHexAddress(address)}</span>
-					<div>
-						<IconCopy className="h-4 w-4" />
+				<a className="block z-10" href={`https://opbnb.bscscan.com/address/${address}`} target="_blank">
+					<div className="text-white mb-4 px-4 py-1 bg-sky-600 text-sm rounded-md flex items-center gap-1 box-shadow-custom">
+						<img 
+							src="https://opbnb.bscscan.com/assets/opbnb/images/svg/logos/token-light.svg"
+							className="h-4 w-4"
+							alt="opBNB symbol"
+						/>
+						<span>{splitHexAddress(address)}</span>
+						<div>
+							<IconExternalLink className="h-4 w-4" />
+						</div>
 					</div>
-				</div>
+				</a>
 			)}
 
 			<Link href="/music-game">
